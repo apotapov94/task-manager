@@ -1,7 +1,11 @@
 <template>
   <aside class="modals-container" :class="{ show: view.panelShow }">
-    <div class="title">
+    <div v-if="view.view !== 'task-detail'" class="title">
       <h2>{{ view.heading }}</h2>
+    </div>
+    <div v-if="view.view == 'task-detail'" class="title">
+      <h2 v-show="mode !== 'edit-title'" @click="setMode('edit-title')">{{ view.heading }}</h2>
+      <input @keyup.enter="saveTitle(curTaskId)" v-show="mode === 'edit-title'" :value="view.heading" type="text">
     </div>
     <Message v-if="message.show" :type="message.type" :text="message.text" />
     <AddTaskForm v-if="view.view == 'addTask'" />
@@ -31,6 +35,12 @@ export default {
     },
     loading (){
       return this.$store.getters.getLoading
+    },
+    curTaskId (){
+      return this.$store.getters.getActiveTaskId
+    },
+    mode (){
+      return this.$store.getters.getMode
     }
   },
   methods: {
@@ -39,6 +49,18 @@ export default {
       this.$store.dispatch('closeMenu')
       //this.$store.dispatch('setHeading', '')
       //this.$store.dispatch('hideView')
+    },
+    setMode (mode){
+      this.$store.dispatch('setMode', mode)
+      let input = event.target.nextSibling;
+      console.log(input)
+      setTimeout(function(){
+        input.focus();
+      }, 10)
+    },
+    saveTitle (id){
+      let value = event.target.value
+      this.$store.dispatch('saveTitle', { id, value })
     }
   }
 }

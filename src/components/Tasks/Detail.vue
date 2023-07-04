@@ -1,8 +1,13 @@
 <template>
     <div class="task-detail" v-if="task">
         <div class="task-detail__header">
-            <div class="task-detail__buttons" v-if="authUser.id == task.author || authUser.id == task.executor">
-                <AppButton>Готово</AppButton>
+            <div class="task-detail__buttons" >
+                <AppButton v-if="authUser.id == task.author || authUser.id == task.executor">Готово</AppButton>
+                <div class="small-icons">
+                    <div class="small-icon remove" @click="deleteTask(curTaskId)" v-if="authUser.id == task.author">
+                        <img src="@/assets/img/remove.png" alt="">
+                    </div>
+                </div>
             </div>
             <div class="task-detail__created-at">
                 Создано: <span>{{ task.created }}</span>
@@ -21,8 +26,9 @@
             <div :class="`task-detail__info task-detail__priority ${task.priority}`">
                 Приоритет: <span>{{ getPriority(task.priority) }}</span>
             </div>
-            <div class="task-detail__description">
-                {{ task.descr }}
+            <div @click="setMode('edit-descr')" class="task-detail__description">
+                <div v-show="mode !== 'edit-descr'">{{ task.descr }}</div>
+                <textarea @keyup.enter="saveDescr(curTaskId)" v-show="mode === 'edit-descr'">{{ task.descr }}</textarea>
             </div>
         </div>
     </div>
@@ -36,6 +42,12 @@
             },
             authUser (){
                 return this.$store.getters.getAuthUser
+            },
+            curTaskId (){
+                return this.$store.getters.getActiveTaskId
+            },
+            mode (){
+                return this.$store.getters.getMode
             }
         },
         methods: {
@@ -70,6 +82,20 @@
                         break 
                 }
                 return priorityText
+            },
+            deleteTask (id){
+                this.$store.dispatch('deleteTask', id)
+            },
+            setMode (mode){
+                this.$store.dispatch('setMode', mode)
+                let input = event.target.nextSibling;
+                setTimeout(function(){
+                    input.focus();
+                }, 10)
+            },
+            saveDescr (id){
+                let value = event.target.value
+                this.$store.dispatch('saveDescr', { id, value })
             }
         }
     }
