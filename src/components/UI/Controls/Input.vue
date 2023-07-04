@@ -8,9 +8,9 @@
             :placeholder="placeholder"
             @input="$emit('update:modelValue', $event.target.value)"    
         >
-        <p v-if="errors" class="error-text" v-for="error of errors" :key="error.$uid">
+        <p class="error-text" v-for="error of errors" :key="error.$uid">
             {{ error.$message }}
-         </p>
+        </p>
     </div>
 </template>
 
@@ -31,7 +31,7 @@
             },
             errors: {
                 type: Array,
-                required: false
+                default: []
             }
         }
     }
