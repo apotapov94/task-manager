@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     showAddTaskForm() {
+      this.$store.dispatch('showPanel');
       this.$store.dispatch('showView', 'addTask');
       this.$store.dispatch('setHeading', 'Новая задача');
     }

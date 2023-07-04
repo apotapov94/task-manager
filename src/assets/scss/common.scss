@@ -1,5 +1,6 @@
 // обновленные стандартные стили
-
+@import 'utils/vars';
+@import 'utils/reset';
 // Заголовок
 @import 'common/title';
 // Контролы
@@ -14,3 +15,5 @@
 @import 'common/table';
 // Анимации
 @import 'common/animations';
+// Сообщения
+@import 'common/message';

@@ -41,6 +41,7 @@ export default {
       return formatedDate
     },
     showTaskDetail() {
+      this.$store.dispatch('showPanel');
       this.$store.dispatch('setTaskToShow', this.task.id)
       this.$store.dispatch('showView', 'task-detail');
       this.$store.dispatch('setHeading', this.task.title);

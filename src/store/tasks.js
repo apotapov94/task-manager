@@ -28,6 +28,7 @@ export default {
     //   commit('addTask')
     // },
     async addTask ({commit, dispatch},){
+      dispatch('setLoading', true)
       const authorId = this.getters.getUser.uid
       const newTaskInfo = {
         created: new Date(Date.now()).toLocaleString(),
@@ -37,7 +38,13 @@ export default {
       try {
           const docRef = await addDoc(collection(db, "tasks"), newTask);
           commit('addTask', Object.assign(newTask,{id: docRef.id}))
+          dispatch('setLoading', false)
+          dispatch('setMessage', { text: 'Задача успешно добавлена!' })
+          setTimeout(function(){
+            dispatch('hideMessage')}, 2000
+          )
       } catch (e) {
+          dispatch('setLoading', false)
           console.error("Error adding document: ", e);
       }
     },
