@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, limit } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, limit, deleteDoc, doc, setDoc } from "firebase/firestore";
 //import { getDatabase, ref, set } from "firebase/database";
 
 
@@ -27,4 +27,4 @@ const db = getFirestore(app);
 
 const auth = getAuth();
 
-export { auth, db, collection, addDoc, query, where, getDocs, orderBy, limit };
+export { auth, db, collection, addDoc, query, where, getDocs, orderBy, limit, deleteDoc, doc, setDoc };

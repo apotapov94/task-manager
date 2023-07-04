@@ -1,0 +1,8 @@
+.message {
+    border-radius: 10px;
+    padding: $m2;
+    &.success {
+        background: rgba(56, 167, 90, 0.5098039216);
+        color: #ffffff;
+    }
+}

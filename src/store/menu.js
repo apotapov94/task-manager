@@ -6,11 +6,18 @@ export default {
       showMenuToggle(state) {
         state.showMenu = !state.showMenu
         this.state.rightPanel.mask = true
+      },
+      closeMenu (state){
+        state.showMenu = false
+        this.state.rightPanel.mask = false
       }
     },
     actions: {
       showMenuToggle({ commit }){
         commit('showMenuToggle')
+      },
+      closeMenu({ commit }){
+        commit('closeMenu')
       }
     },
     getters: {

@@ -1,6 +1,6 @@
 <template>
-  <div class="page-wrapper">
-    <Title title="Главная" />
+  <Title title="Главная" />
+  <div class="page-wrapper"> 
   </div>
 </template>
 

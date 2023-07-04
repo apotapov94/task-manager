@@ -226,7 +226,7 @@ main {
   background-size: cover;
 }
 .page-wrapper {
-  padding: 0 $m4;
+  padding: $m4;
   background: #250a0acc;
   height: 100%;
   p, span, h1, h2 {
@@ -317,6 +317,10 @@ main {
       }
     }
   }
+  &__created-at {
+    font-size: 12px;
+    color: #969696;
+  }
   &__deadline-days-count {
     background: $danger-color;
     padding: 2px 4px;
@@ -346,17 +350,38 @@ main {
   &__buttons {
     display: flex;
     grid-gap: 8px;
+    align-items: center;
   }
   &__body {
     display: flex;
     flex-direction: column;
     grid-gap: 8px;
   }
+  textarea {
+    background: transparent;
+    overflow: hidden;
+    color: #fff;
+    padding: 0;
+    height: 300px;
+    border-radius: 0;
+  }
+}
+
+.small-icon {
+  cursor: pointer;
+  img {
+    height: 16px;
+  }
+}
+.small-icons {
+  display: flex;
+  grid-gap: 4px;
 }
 
 .modals-container {
   width: 500px;
   position: fixed;
+  overflow-y: scroll;
   background: $primary-color;
   padding: $m4 $m2;
   top: 0;
@@ -366,8 +391,30 @@ main {
   transform: translateX(700px);
   z-index: 100;
   color: $default-color;
+  .close-btn {
+    display: none;
+  }
+  &__mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+    background: #0000006e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .title {
     margin-bottom: $m4;
+    input {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+      color: #fff;
+      font-size: 24px;
+    }
   }
   &.show {
     transform: translateX(0);
@@ -438,34 +485,54 @@ form {
 .loader {
   width: 48px;
   height: 48px;
+  border-radius: 50%;
   display: inline-block;
   position: relative;
+  border: 3px solid;
+  border-color: $success-color $success-color transparent transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 .loader::after,
 .loader::before {
   content: '';  
   box-sizing: border-box;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #6ebeff;
   position: absolute;
   left: 0;
+  right: 0;
   top: 0;
-  animation: animloader 2s linear infinite;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid;
+  border-color: transparent transparent #fff #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotationBack 0.5s linear infinite;
+  transform-origin: center center;
 }
-.loader::after {
-  animation-delay: 1s;
+.loader::before {
+  width: 32px;
+  height: 32px;
+  border-color: $success-color $success-color transparent transparent;
+  animation: rotation 1.5s linear infinite;
 }
-
-@keyframes animloader {
+    
+@keyframes rotation {
   0% {
-    transform: scale(0);
-    opacity: 1;
+    transform: rotate(0deg);
   }
   100% {
-    transform: scale(1);
-    opacity: 0;
+    transform: rotate(360deg);
+  }
+} 
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
   }
 }
 
@@ -546,5 +613,24 @@ form {
 @media(max-width: 768px){
   .tasks-list {
     grid-template-columns: repeat(1,1fr);
+  }
+  .modals-container {
+    width: 100%;
+    transform: translateX(110%);
+    form {
+      max-width: 100%;
+    }
+    .close-btn {
+      width: 42px;
+      margin-top: 16px;
+      height: 42px;
+      background: $success-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      margin-left: -16px;
+    }
   }
 }

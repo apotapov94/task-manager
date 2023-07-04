@@ -1,7 +1,8 @@
-import { auth, db, collection, addDoc, query, where, getDocs, orderBy, limit } from '../firebase'
+import { auth, db, collection, addDoc, query, where, getDocs, orderBy, limit, deleteDoc, doc, setDoc } from '../firebase'
 
 export default {
   state: {
+    mode: null,
     tasks: [],
     taskToShowId: null
   },
@@ -17,27 +18,58 @@ export default {
       state.tasks.forEach(function (elem, index) {
         if (elem.id == id) state.tasks.splice(index, 1)
       })
-      localStorage.tasks = JSON.stringify(state.tasks)
     },
     setTaskToShow (state, id){
       state.taskToShowId = id
+    },
+    setMode (state, mode){
+      state.mode = mode
+    },
+    saveDescr (state, {descr, id}){
+
+    },
+    saveTitle (state, {descr, id}){
+
     }
   },
   actions: {
-    // addTask({ commit }) {
-    //   commit('addTask')
-    // },
     async addTask ({commit, dispatch},){
+      dispatch('setLoading', true)
       const authorId = this.getters.getUser.uid
       const newTaskInfo = {
         created: new Date(Date.now()).toLocaleString(),
-        author: authorId
+        author: authorId,
+        status: 'active'
       }
       const newTask = Object.assign(newTaskInfo, this.state.newTask.formData)
       try {
           const docRef = await addDoc(collection(db, "tasks"), newTask);
           commit('addTask', Object.assign(newTask,{id: docRef.id}))
+          dispatch('setLoading', false)
+          dispatch('setMessage', { text: 'Задача успешно добавлена!' })
+          setTimeout(function(){
+            dispatch('hideMessage')}, 2000
+          )
       } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
+    },
+    async deleteTask ({commit, dispatch}, payload){
+      dispatch('setLoading', true)
+      try {
+        console.log(payload)
+        await deleteDoc(doc(db, "tasks", payload));
+        dispatch('setLoading', false)
+        dispatch('setMessage', { text: 'Задача успешно удалена!' })
+        setTimeout(function(){
+          dispatch('hideMessage')
+          dispatch('hidePanel')
+        }, 2000
+        )
+        commit('deleteTask', payload)
+      } catch (e) {
+          dispatch('setLoading', false)
           console.error("Error adding document: ", e);
       }
     },
@@ -54,11 +86,43 @@ export default {
       });
       commit('refreshTasks', formatData)
     },
-    deleteTask({ commit }, payload) {
-      commit('deleteTask', payload)
-    },
     setTaskToShow ({ commit }, taskId){
       commit('setTaskToShow', taskId)
+    },
+    setMode({ commit }, payload){
+      commit('setMode', payload)
+    },
+    async saveDescr ({ commit, dispatch }, { id, value }){
+      
+      dispatch('setLoading', true)
+      try {
+        console.log(id, value)
+        const taskRef = doc(db, 'tasks', id);
+        await setDoc(taskRef, { descr: value }, { merge: true });
+        console.log('success')
+        dispatch('setLoading', false)
+        dispatch('setMode', null)
+        dispatch('refreshTasks')
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
+    },
+    async saveTitle ({ commit, dispatch }, { id, value }){
+      dispatch('setLoading', true)
+      try {
+        console.log(id, value)
+        const taskRef = doc(db, 'tasks', id);
+        await setDoc(taskRef, { title: value }, { merge: true });
+        console.log('success')
+        dispatch('setLoading', false)
+        dispatch('setMode', null)
+        dispatch('refreshTasks')
+        dispatch('setHeading', value);
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
     }
   },
   getters: {
@@ -71,11 +135,15 @@ export default {
       }
     },
     getTaskById (state){
-      console.log(state.taskToShowId)
       if(state.taskToShowId){
-        console.log(state.taskToShowId)
         return state.tasks.find(task => task.id === state.taskToShowId)
       }
+    },
+    getActiveTaskId (state){
+      return state.taskToShowId
+    },
+    getMode (state){
+      return state.mode
     }
   }
 }
