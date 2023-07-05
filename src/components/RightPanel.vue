@@ -41,22 +41,31 @@ export default {
     },
     mode (){
       return this.$store.getters.getMode
-    }
+    },
+    task (){
+      return this.$store.getters.getTaskById
+    },
+    authUser (){
+      return this.$store.getters.getAuthUser
+    },
   },
   methods: {
     hideRightPanel() {
       this.$store.dispatch('hidePanel')
       this.$store.dispatch('closeMenu')
+      this.$store.dispatch('setMode', null)
       //this.$store.dispatch('setHeading', '')
       //this.$store.dispatch('hideView')
     },
     setMode (mode){
-      this.$store.dispatch('setMode', mode)
-      let input = event.target.nextSibling;
-      console.log(input)
-      setTimeout(function(){
-        input.focus();
-      }, 10)
+      if(this.authUser.id == this.task.author){
+        this.$store.dispatch('setMode', mode)
+        let input = event.target.nextSibling;
+        console.log(input)
+        setTimeout(function(){
+          input.focus();
+        }, 10)
+      }  
     },
     saveTitle (id){
       let value = event.target.value

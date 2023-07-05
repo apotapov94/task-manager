@@ -31,10 +31,10 @@
               <router-link to="/">Главная</router-link>
             </li>
             <li>
-              <router-link to="/all-tasks">Все задачи <span class="count">{{ this.$store.getters.getAllTasks.length }}</span></router-link>
+              <router-link to="/all-tasks">Все задачи <span class="count">{{ this.$store.getters.getAllTasksCount }}</span></router-link>
             </li>
             <li v-if="user">
-              <router-link to="/my-tasks">Мои задачи <span class="count">{{ this.$store.getters.getMyTasks.length }}</span></router-link>
+              <router-link to="/my-tasks">Мои задачи <span class="count">{{ this.$store.getters.getMyTasksCount }}</span></router-link>
             </li>
             <li>
               <router-link to="/register">Регистрация</router-link>
@@ -42,7 +42,7 @@
             <li v-if="!user">
               <router-link to="/login">Вход</router-link>
             </li>
-            <li @click="logout" v-if="user">Выход</li>
+            <li @click="logout" class="logout-link" v-if="user">Выход</li>
           </ul>
         </nav>
         <nav class="header__menu-onload" v-if="loading">

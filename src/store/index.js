@@ -5,6 +5,8 @@ import auth from './auth'
 import users from './users'
 import rightPanel from './rightPanel'
 import menu from './menu'
+import comments from './comments'
+import filter from './filter'
 
 export default createStore({
   modules: {
@@ -13,6 +15,8 @@ export default createStore({
     rightPanel,
     auth,
     users,
-    menu
+    menu,
+    comments,
+    filter
   }
 })

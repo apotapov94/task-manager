@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="tasks-list">
+    <div :class="`tasks-list ${viewMode}`">
       <TaskCard v-for="task in tasks" :task="task" />
       <button v-if="abilityToAdd" @click="showAddTaskForm" class="btn btn-primary">Добавить задачу</button>
     </div>
@@ -12,6 +12,14 @@ import TaskCard from '@/components/Tasks/Card.vue';
 export default {
   components: {
     TaskCard
+  },
+  computed: {
+    viewMode (){
+      return this.$store.getters.getViewMode
+    },
+    filter (){
+      return this.$store.getters.getFilter
+    }
   },
   props: {
     tasks: {

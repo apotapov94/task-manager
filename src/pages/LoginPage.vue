@@ -1,6 +1,6 @@
 <template>
+    <Title title="Авторизация" />
     <div class="page-wrapper">
-      <Title title="Авторизация" />
       <Login />
     </div>
   </template>
