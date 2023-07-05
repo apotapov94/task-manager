@@ -39,7 +39,7 @@
         :errors="v$.date.$errors">
       </AppInput>
       <AppTextArea placeholder="Описание" v-model="descr"></AppTextArea>
-      <AppButton>Вход</AppButton>
+      <AppButton>Добавить задачу</AppButton>
     </form>
   </div>
 </template>

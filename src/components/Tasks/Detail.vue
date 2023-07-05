@@ -1,10 +1,18 @@
 <template>
     <div class="task-detail" v-if="task">
         <div class="task-detail__header">
-            <div class="task-detail__buttons" >
-                <AppButton v-if="authUser.id == task.author || authUser.id == task.executor">Готово</AppButton>
+            <div class="task-detail__buttons" v-if="authUser.id == task.executor">
+                <AppButton @click="setStatus('done')" v-if="task.status === 'active' && authUser.id == task.author">Готово</AppButton>
+                <AppButton @click="setStatus('checking')" v-if="task.status === 'active' && authUser.id !== task.author">Готово</AppButton>
+                <AppButton class="btn-default" v-if="task.status === 'checking'">На проверке</AppButton>
+                <AppButton class="btn-default" v-if="task.status === 'done'">Выполнено</AppButton>
+            </div>
+            <div class="task-detail__buttons" v-else-if="authUser.id == task.author">
+                <AppButton @click="setStatus('active')" v-if="task.status === 'checking'">Вернуть в работу</AppButton>
+                <AppButton @click="setStatus('done')" v-if="task.status === 'checking'">Готово</AppButton>
+                <AppButton class="btn-default" v-if="task.status === 'done'">Выполнено</AppButton>
                 <div class="small-icons">
-                    <div class="small-icon remove" @click="deleteTask(curTaskId)" v-if="authUser.id == task.author">
+                    <div class="small-icon remove" @click="deleteTask(curTaskId)">
                         <img src="@/assets/img/remove.png" alt="">
                     </div>
                 </div>
@@ -14,6 +22,9 @@
             </div>
         </div>
         <div class="task-detail__body">
+            <div class="task-detail__info status">
+                Статус: <span :class="task.status">{{ getStatus(task.status) }}</span>
+            </div>
             <div class="task-detail__info user">
                 Исполнитель: <span>{{ getUser(task.executor).name }}</span>
             </div>
@@ -31,11 +42,18 @@
                 <textarea @keyup.enter="saveDescr(curTaskId)" v-show="mode === 'edit-descr'">{{ task.descr }}</textarea>
             </div>
         </div>
+        <div class="task-detail__footer">
+            <Comments :comments="comments" />
+        </div>
     </div>
 </template>
 
 <script>
+    import Comments from '@/components/Comments/List.vue'
     export default {
+        components: {
+            Comments
+        },
         computed: {
             task (){
                 return this.$store.getters.getTaskById
@@ -48,6 +66,9 @@
             },
             mode (){
                 return this.$store.getters.getMode
+            },
+            comments (){
+                return this.$store.getters.getTaskComments
             }
         },
         methods: {
@@ -68,6 +89,7 @@
             getUser (id){
                 return this.$store.getters.getUserById(id)
             },
+            
             getPriority (priority){
                 let priorityText
                 switch(priority){
@@ -83,20 +105,45 @@
                 }
                 return priorityText
             },
+            getStatus (status){
+                let statusText
+                switch(status){
+                    case 'active':
+                        statusText = 'В работе'
+                        break
+                    case 'checking':
+                        statusText = 'На проверке'
+                        break    
+                    case 'done':
+                        statusText = 'Выполнена'
+                        break 
+                }
+                return statusText
+            },
             deleteTask (id){
                 this.$store.dispatch('deleteTask', id)
             },
             setMode (mode){
-                this.$store.dispatch('setMode', mode)
-                let input = event.target.nextSibling;
-                setTimeout(function(){
-                    input.focus();
-                }, 10)
+                if(this.authUser.id == this.task.author){
+                    this.$store.dispatch('setMode', mode)
+                    let input = event.target.nextSibling;
+                    setTimeout(function(){
+                        input.focus();
+                    }, 10)
+                }
             },
             saveDescr (id){
                 let value = event.target.value
                 this.$store.dispatch('saveDescr', { id, value })
+            },
+            setStatus (status){
+                let id = this.curTaskId
+                this.$store.dispatch('setStatus', {id, status})
             }
+        },
+        beforeMount() {
+            console.log(1)
+            this.$store.dispatch('refreshComments');
         }
     }
 </script>

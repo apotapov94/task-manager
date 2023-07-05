@@ -9,7 +9,6 @@
         </form>
         <!-- <button @click="signWithGoogle">Sign with google</button> -->
     </section>
-    {{ registerForm }}
 </template>
 
 <script>

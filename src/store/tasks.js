@@ -4,7 +4,8 @@ export default {
   state: {
     mode: null,
     tasks: [],
-    taskToShowId: null
+    taskToShowId: null,
+    viewMode: 'grid'
   },
   mutations: {
     addTask(state, newTask) {
@@ -30,6 +31,19 @@ export default {
     },
     saveTitle (state, {descr, id}){
 
+    },
+    switchMode (state, mode){
+      state.viewMode = mode
+    },
+    setStatus (state, {id, status}){
+      console.log(id)
+      let newState = state.tasks.map(function(task){
+        if(task.id == id){
+          task.status = status
+          return task
+        }
+      })
+      state.tasks = state.tasks
     }
   },
   actions: {
@@ -60,6 +74,7 @@ export default {
       try {
         console.log(payload)
         await deleteDoc(doc(db, "tasks", payload));
+        dispatch('deleteTaskComments', payload);
         dispatch('setLoading', false)
         dispatch('setMessage', { text: 'Задача успешно удалена!' })
         setTimeout(function(){
@@ -78,10 +93,10 @@ export default {
       const q = query(collection(db, "tasks"), orderBy('date', 'asc'));
       const tasks = await getDocs(q);
       let formatData = []
-      tasks.forEach((doc) => {
+      tasks.forEach((task) => {
         //console.log(doc)
         // doc.data() is never undefined for query doc snapshots
-        const taskData = Object.assign(doc.data(), {id: doc.id})
+        const taskData = Object.assign(task.data(), {id: task.id})
         formatData.push(taskData);
       });
       commit('refreshTasks', formatData)
@@ -123,15 +138,55 @@ export default {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
       }
+    },
+    switchMode({ commit }, payload){
+      commit('switchMode', payload)
+    },
+    async setStatus ({ commit,dispatch }, {id, status}){
+      dispatch('setLoading', true)
+      try {
+        console.log(id, status)
+        const taskRef = doc(db, 'tasks', id);
+        await setDoc(taskRef, { status: status }, { merge: true });
+        console.log('success')
+        dispatch('setLoading', false)
+        //dispatch('refreshTasks')
+        commit('setStatus', {id, status})
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
     }
   },
   getters: {
-    getAllTasks (state){
-      return state.tasks
+    getAllTasks (state, getters){
+      if(getters.getFilter.status == 'all'){
+        return state.tasks
+      } else {
+        return state.tasks.filter(task => task.status === getters.getFilter.status)
+      }
     },
     getMyTasks (state, getters){
       if(getters.getUser){
-        return state.tasks.filter(task => task.executor === getters.getUser.uid)
+        if(getters.getFilter.status == 'all'){
+          return state.tasks.filter(task => task.executor === getters.getUser.uid)
+        } else {
+          return state.tasks.filter(function(task){
+            if(task.status === getters.getFilter.status && task.executor === getters.getUser.uid){
+              return true
+            }
+          })
+        }
+        
+      }
+    },
+    getAllTasksCount (state){
+      return state.tasks.length
+    },
+    getMyTasksCount (state){
+      if(getters.getUser){
+        const myTasks = state.tasks.filter(task => task.executor === getters.getUser.uid)
+        return myTasks.length
       }
     },
     getTaskById (state){
@@ -144,6 +199,9 @@ export default {
     },
     getMode (state){
       return state.mode
+    },
+    getViewMode (state){
+      return state.viewMode
     }
   }
 }

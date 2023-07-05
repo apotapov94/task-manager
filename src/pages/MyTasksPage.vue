@@ -1,6 +1,10 @@
 <template>
     <Title title="Задачи" />
     <div class="page-wrapper">
+      <div class="top-panel">
+        <ViewSwitcher />
+        <StatusFilter />
+      </div>
       <TasksList :tasks="this.$store.getters.getMyTasks" />
     </div>
 </template>
@@ -9,11 +13,15 @@
 import Title from '@/components/UI/Title.vue'
 import TasksList from '@/components/Tasks/List.vue'
 import AddTaskForm from '@/components/AddTaskForm.vue'
+import ViewSwitcher from '@/components/UI/ViewSwitcher.vue'
+import StatusFilter from '@/components/UI/StatusFilter.vue'
 export default {
 components: {
     Title,
     TasksList,
-    AddTaskForm
+    AddTaskForm,
+    ViewSwitcher,
+    StatusFilter
 },
 computed: {
     newTask() {
