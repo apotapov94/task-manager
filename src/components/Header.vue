@@ -36,7 +36,10 @@
             <li v-if="user">
               <router-link to="/my-tasks">Мои задачи <span class="count">{{ this.$store.getters.getMyTasksCount }}</span></router-link>
             </li>
-            <li>
+            <li v-if="user">
+              <router-link to="/projects">Проекты</router-link>
+            </li>
+            <li v-if="!user">
               <router-link to="/register">Регистрация</router-link>
             </li>
             <li v-if="!user">
@@ -90,6 +93,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('refreshTasks');
+    this.$store.dispatch('refreshProjects');
   }
 }
 </script>

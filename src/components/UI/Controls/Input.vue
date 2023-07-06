@@ -1,6 +1,5 @@
 <template>
     <div class="input-group">
-        <label><slot /></label>
         <input
             v-bind="$attrs"
             :value="modelValue"

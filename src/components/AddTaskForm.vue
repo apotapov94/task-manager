@@ -9,7 +9,6 @@
         :errors="v$.title.$errors">
       </AppInput>
       <div class="input-group">
-        <label for=""></label>
         <select name="priority" v-model="priority">
           <option value="standart" selected>Стандартный</option>
           <option value="high">Повышенный</option>
@@ -17,7 +16,6 @@
         </select>
       </div>
       <div class="input-group">
-        <label for=""></label>
         <select 
           name="executor" 
           v-model="executor" 
@@ -29,6 +27,14 @@
         <p class="error-text" v-for="error of v$.executor.$errors" :key="error.$uid">
           {{ error.$message }}
         </p>
+      </div>
+      <div class="input-group">
+        <select 
+          name="project" 
+          v-model="project">
+          <option value="" selected>Выбрать проект</option>
+          <option v-for="project in projects" :value="project.id">{{ project.title }}</option>
+        </select>
       </div>
       <AppInput 
         type="date" 
@@ -46,7 +52,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength, email, helpers, sameAs } from '@vuelidate/validators';
+import { required, helpers } from '@vuelidate/validators';
 export default {
   setup () {
     return { v$: useVuelidate() }
@@ -89,6 +95,14 @@ export default {
         this.$store.dispatch('updateExecutor', value)
       }
     },
+    project: {
+      get() {
+        return this.$store.getters.getProject
+      },
+      set(value) {
+        this.$store.dispatch('updateProject', value)
+      }
+    },
     date: {
       get() {
         return this.$store.getters.getDate
@@ -108,6 +122,9 @@ export default {
     users (){
       return this.$store.getters.getUsers
     },
+    projects (){
+      return this.$store.getters.getProjects
+    }
   },
   methods: {
     addTask() {

@@ -160,11 +160,36 @@ export default {
   },
   getters: {
     getAllTasks (state, getters){
-      if(getters.getFilter.status == 'all'){
-        return state.tasks
+      let tasksResult
+      if(getters.getFilter.status === 'all'){
+        tasksResult = state.tasks
       } else {
-        return state.tasks.filter(task => task.status === getters.getFilter.status)
+        tasksResult = state.tasks.filter(task => task.status === getters.getFilter.status)
       }
+      if(getters.getFilter.search){
+        tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+        // tasksResult = state.tasks.filter(function(task){
+        //   if( 
+        //     task.title.indexOf(getters.getFilter.search) !== -1
+        //   ){
+        //     return true
+        //   } 
+        // }) 
+      }
+      return tasksResult
+      
+      // if(getters.getFilter.status === 'all'){
+      //   return state.tasks
+      // } else {
+      //   return state.tasks.filter(function(task){
+      //     if( task.status === getters.getFilter.status
+      //       && task.title.indexOf(getters.getFilter.search) !== -1
+      //     ){
+      //       console.log(task.title.indexOf(getters.getFilter.search))
+      //       return true
+      //     } 
+      //   })  
+      // }
     },
     getMyTasks (state, getters){
       if(getters.getUser){
@@ -183,7 +208,7 @@ export default {
     getAllTasksCount (state){
       return state.tasks.length
     },
-    getMyTasksCount (state){
+    getMyTasksCount (state, getters){
       if(getters.getUser){
         const myTasks = state.tasks.filter(task => task.executor === getters.getUser.uid)
         return myTasks.length
@@ -202,6 +227,9 @@ export default {
     },
     getViewMode (state){
       return state.viewMode
+    },
+    getTasksByProjectId: state => id => {
+      return state.tasks.filter(task => task.project === id)
     }
   }
 }

@@ -2,6 +2,12 @@
   <div @click="showTaskDetail" :class="`task-card ${task.priority}`">
     <div class="task-card__header">
       <div class="task-card__title">{{ task.title }}</div>
+      <div class="task-card__executor">
+        Исполнитель: <span>{{ getUser(task.executor).name }}</span>
+      </div>
+      <div class="task-card__project" v-if="getProject(task.project)">
+        Проект: <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
+      </div>
     </div>
     
     <div class="task-card__footer">
@@ -61,6 +67,12 @@ export default {
               break 
       }
       return priorityText
+    },
+    getProject (id){
+      return this.$store.getters.getProjectById(id)
+    },
+    getUser (id){
+      return this.$store.getters.getUserById(id)
     },
   }
 }

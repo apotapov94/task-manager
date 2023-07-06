@@ -9,6 +9,7 @@
     </div>
     <Message v-if="message.show" :type="message.type" :text="message.text" />
     <AddTaskForm v-if="view.view == 'addTask'" />
+    <AddProjectForm v-if="view.view == 'addProject'" />
     <TaskDetail v-if="view.view == 'task-detail'" />
     <div v-if="loading" class="modals-container__mask">
       <Loader />
@@ -21,10 +22,11 @@
 
 <script>
 import AddTaskForm from '@/components/AddTaskForm.vue'
+import AddProjectForm from '@/components/AddProjectForm.vue'
 import TaskDetail from '@/components/Tasks/Detail.vue'
 export default {
   components: {
-    AddTaskForm, TaskDetail
+    AddTaskForm, AddProjectForm, TaskDetail
   },
   computed: {
     view() {

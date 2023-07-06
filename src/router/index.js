@@ -5,6 +5,8 @@ import AllTasksPage from '@/pages/AllTasksPage.vue'
 import MyTasksPage from '@/pages/MyTasksPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
+import ProjectsPage from '@/pages/ProjectsPage.vue'
+import ProjectDetailPage from '@/pages/ProjectDetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +31,19 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: ProjectsPage,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/projects/:keyword',
+      name: 'projectPage',
+      component: ProjectDetailPage
     },
     {
       path: '/register',

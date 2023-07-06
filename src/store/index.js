@@ -7,6 +7,8 @@ import rightPanel from './rightPanel'
 import menu from './menu'
 import comments from './comments'
 import filter from './filter'
+import addProjectForm from './addProjectForm'
+import projects from './projects'
 
 export default createStore({
   modules: {
@@ -17,6 +19,8 @@ export default createStore({
     users,
     menu,
     comments,
-    filter
+    filter,
+    projects,
+    addProjectForm
   }
 })
