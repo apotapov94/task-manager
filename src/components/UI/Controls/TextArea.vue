@@ -1,6 +1,5 @@
 <template>
     <div class="input-group">
-        <label><slot /></label>
         <textarea
             :value="modelValue"
             :placeholder="placeholder"

@@ -6,7 +6,8 @@ export default {
       priority: 'standart',
       executor: '',
       date: '',
-      descr: ''
+      descr: '',
+      project: ''
     }
   },
   mutations: {
@@ -25,13 +26,17 @@ export default {
     updateDescr(state, descr) {
       state.formData.descr = descr
     },
+    updateProject(state, project) {
+      state.formData.project = project
+    },
     addTaskFormReset(state) {
       state.formData = {
         title: '',
         priority: 'standart',
         executor: '',
         date: '',
-        descr: ''
+        descr: '',
+        project: ''
       }
     }
   },
@@ -50,6 +55,9 @@ export default {
     },
     updateDescr({ commit }, payload){
       commit('updateDescr', payload)
+    },
+    updateProject({ commit }, payload){
+      commit('updateProject', payload)
     },
     addTaskFormReset({ commit }){
       commit('addTaskFormReset')
@@ -70,6 +78,9 @@ export default {
     },
     getDescr(state) {
       return state.formData.descr
+    },
+    getProject(state) {
+      return state.formData.project
     }
   }
 }

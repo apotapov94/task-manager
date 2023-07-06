@@ -2,8 +2,8 @@
   <section>
     <div :class="`tasks-list ${viewMode}`">
       <TaskCard v-for="task in tasks" :task="task" />
-      <button v-if="abilityToAdd" @click="showAddTaskForm" class="btn btn-primary">Добавить задачу</button>
     </div>
+    <button v-if="abilityToAdd" @click="showAddTaskForm" class="btn btn-primary">Добавить задачу</button>
   </section>
 </template>
 
@@ -15,7 +15,11 @@ export default {
   },
   computed: {
     viewMode (){
-      return this.$store.getters.getViewMode
+      if(this.view){
+        return this.view
+      } else {
+        return this.$store.getters.getViewMode
+      }
     },
     filter (){
       return this.$store.getters.getFilter
@@ -29,6 +33,10 @@ export default {
     abilityToAdd: {
       type: Boolean,
       default: true
+    },
+    view: {
+      type: String,
+      default: ''
     }
   },
   methods: {

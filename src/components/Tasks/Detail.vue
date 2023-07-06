@@ -31,6 +31,9 @@
             <div class="task-detail__info user">
                 Постановщик: <span>{{ getUser(task.author).name }}</span>
             </div>
+            <div class="task-detail__info user">
+                Проект: <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
+            </div>
             <div class="task-detail__info">
                 Дедлайн: <span>{{ dateFormat(task.date) }}</span> <div v-if="daysAfterDeadline(task.date) > 0" class="task-detail__deadline-days-count">{{ daysAfterDeadline(task.date) }}</div>
             </div>
@@ -139,7 +142,10 @@
             setStatus (status){
                 let id = this.curTaskId
                 this.$store.dispatch('setStatus', {id, status})
-            }
+            },
+            getProject (id){
+                return this.$store.getters.getProjectById(id)
+            },
         },
         beforeMount() {
             console.log(1)
