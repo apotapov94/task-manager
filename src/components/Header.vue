@@ -28,10 +28,7 @@
         <nav class="header__menu" v-if="!loading">
           <ul>
             <li>
-              <router-link to="/">Главная</router-link>
-            </li>
-            <li>
-              <router-link to="/all-tasks">Все задачи <span class="count">{{ this.$store.getters.getAllTasksCount }}</span></router-link>
+              <router-link to="/">Все задачи <span class="count">{{ this.$store.getters.getAllTasksCount }}</span></router-link>
             </li>
             <li v-if="user">
               <router-link to="/my-tasks">Мои задачи <span class="count">{{ this.$store.getters.getMyTasksCount }}</span></router-link>

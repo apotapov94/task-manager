@@ -62,8 +62,10 @@ export default {
           dispatch('setLoading', false)
           dispatch('setMessage', { text: 'Задача успешно добавлена!' })
           setTimeout(function(){
-            dispatch('hideMessage')}, 2000
-          )
+            dispatch('hideMessage')
+            dispatch('hidePanel')
+          }, 2000)
+          
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -182,17 +184,24 @@ export default {
       return tasksResult
     },
     getMyTasks (state, getters){
+      let tasksResult
       if(getters.getUser){
-        if(getters.getFilter.status == 'all'){
-          return state.tasks.filter(task => task.executor === getters.getUser.uid)
+        if(getters.getFilter.status === 'all'){
+          tasksResult = state.tasks.filter(task => task.executor === getters.getUser.uid)
         } else {
-          return state.tasks.filter(function(task){
-            if(task.status === getters.getFilter.status && task.executor === getters.getUser.uid){
-              return true
-            }
-          })
+          tasksResult = state.tasks.filter(task => task.executor === getters.getUser.uid)
+          tasksResult = tasksResult.filter(task => task.status === getters.getFilter.status)
+        } 
+        if(getters.getFilter.project.value){
+          tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
         }
-        
+        if(getters.getFilter.priority.value){
+          tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+        }
+        if(getters.getFilter.search){
+          tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+        }
+        return tasksResult
       }
     },
     getAllTasksCount (state){

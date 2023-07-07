@@ -35,5 +35,8 @@ export default {
       return this.$store.getters.getNewTask
     }
   },
+  mounted (){
+    this.$store.dispatch('hidePanel')
+  }
 }
 </script>

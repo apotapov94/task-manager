@@ -16,5 +16,8 @@
     components: {
       Title, ProjectsList, ViewSwitcher
     },
+    mounted (){
+      this.$store.dispatch('hidePanel')
+    }
   }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="filter">
         <div class="added-filters">
-            <div class="filter__active-filter" v-if="filter.project.active">
+            <div class="filter__active-filter" v-if="filter.project.active && !projectFilterExclude">
                 Проект: 
                 <span @click="openContextBlock('projects')">
                     <span class="context-block-link active-value" v-if="filter.project.name">{{filter.project.name}}</span>
@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <div class="filter__active-filter" v-if="filter.executor.active">
+            <div class="filter__active-filter" v-if="filter.executor.active && !executorFilterExclude">
                 Исполнитель: 
                 <span @click="openContextBlock('users')">
                     <span class="context-block-link active-value" v-if="filter.executor.name">{{filter.executor.name}}</span>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="filter__active-filter" v-if="filter.priority.active">
+            <div class="filter__active-filter" v-if="filter.priority.active && !priorityFilterExclude">
                 Приоритет: 
                 <span @click="openContextBlock('priority')">
                     <span class="context-block-link active-value" v-if="filter.priority.name">{{filter.priority.name}}</span>
@@ -50,13 +50,13 @@
         <div class="add-filter">
             <div class="add-filter__link context-block-link" @click="openContextBlock('filters')">Добавить фильтр</div>
             <div class="filters context-block" v-if="contextBlocks.filters">
-                <div class="filter__item" @click="addFilter('project')">
+                <div class="filter__item" v-if="!projectFilterExclude" @click="addFilter('project')">
                     Проект
                 </div>
-                <div class="filter__item" @click="addFilter('executor')">
+                <div class="filter__item" v-if="!executorFilterExclude" @click="addFilter('executor')">
                     Исполнитель
                 </div>
-                <div class="filter__item" @click="addFilter('priority')">
+                <div class="filter__item" v-if="!priorityFilterExclude" @click="addFilter('priority')">
                     Приоритет
                 </div>
             </div>
@@ -69,6 +69,20 @@
     export default {
         components: {
             CloseIcon
+        },
+        props: {
+            projectFilterExclude: {
+                type: Boolean,
+                default: false
+            },
+            executorFilterExclude: {
+                type: Boolean,
+                default: false
+            },
+            priorityFilterExclude: {
+                type: Boolean,
+                default: false
+            }
         },
         computed: {
             filter (){

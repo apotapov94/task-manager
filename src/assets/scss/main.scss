@@ -276,6 +276,9 @@ main {
       }
     }
   }
+  &+.btn {
+    margin-top: 16px;
+  }
   &.list {
     display: grid;
     grid-template-columns: 1fr;

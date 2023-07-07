@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '../firebase'
-import HomePage from '@/pages/HomePage.vue'
 import AllTasksPage from '@/pages/AllTasksPage.vue'
 import MyTasksPage from '@/pages/MyTasksPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
@@ -13,11 +12,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomePage
-    },
-    {
-      path: '/all-tasks',
       name: 'All tasks',
       component: AllTasksPage,
       meta: {
@@ -59,15 +53,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.path === '/login' && auth.currentUser){
-    next('/')
-    return;
-  }
+  // if(to.path === '/login' && auth.currentUser){
+  //   next('/')
+  //   return;
+  // }
 
-  if(to.matched.some(record => record.meta.requiresAuth) && !auth.currentUser){
-    next('/login')
-    return;
-  }
+  // if(to.matched.some(record => record.meta.requiresAuth) && !auth.currentUser){
+  //   next('/login')
+  //   return;
+  // }
 
   next();
 })

@@ -1,6 +1,7 @@
 .message {
     border-radius: 10px;
     padding: $m2;
+    margin: 16px 0;
     &.success {
         background: $success-color;
         color: #ffffff;
