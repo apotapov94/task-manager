@@ -5,6 +5,7 @@
       <ViewSwitcher />
       <StatusFilter />
       <Search />
+      <Filter />
     </div>
     <TasksList :abilityToAdd="false" :tasks="this.$store.getters.getAllTasks" />
   </div>
@@ -17,6 +18,7 @@ import AddTaskForm from '@/components/AddTaskForm.vue'
 import ViewSwitcher from '@/components/UI/ViewSwitcher.vue'
 import StatusFilter from '@/components/UI/StatusFilter.vue'
 import Search from '@/components/UI/Search.vue'
+import Filter from '@/components/UI/Filter.vue'
 
 export default {
   components: {
@@ -25,7 +27,8 @@ export default {
     AddTaskForm,
     ViewSwitcher,
     StatusFilter,
-    Search
+    Search,
+    Filter
   },
   computed: {
     newTask() {

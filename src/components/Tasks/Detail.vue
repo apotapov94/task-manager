@@ -31,7 +31,7 @@
             <div class="task-detail__info user">
                 Постановщик: <span>{{ getUser(task.author).name }}</span>
             </div>
-            <div class="task-detail__info user">
+            <div class="task-detail__info user" v-if="task.project">
                 Проект: <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
             </div>
             <div class="task-detail__info">

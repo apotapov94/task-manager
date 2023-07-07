@@ -166,30 +166,20 @@ export default {
       } else {
         tasksResult = state.tasks.filter(task => task.status === getters.getFilter.status)
       }
+      if(getters.getFilter.project.value){
+        tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
+      }
+      if(getters.getFilter.executor.value){
+        tasksResult = tasksResult.filter(task => task.executor === getters.getFilter.executor.value)
+      }
+      if(getters.getFilter.priority.value){
+        tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+      }
       if(getters.getFilter.search){
         tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
-        // tasksResult = state.tasks.filter(function(task){
-        //   if( 
-        //     task.title.indexOf(getters.getFilter.search) !== -1
-        //   ){
-        //     return true
-        //   } 
-        // }) 
       }
-      return tasksResult
       
-      // if(getters.getFilter.status === 'all'){
-      //   return state.tasks
-      // } else {
-      //   return state.tasks.filter(function(task){
-      //     if( task.status === getters.getFilter.status
-      //       && task.title.indexOf(getters.getFilter.search) !== -1
-      //     ){
-      //       console.log(task.title.indexOf(getters.getFilter.search))
-      //       return true
-      //     } 
-      //   })  
-      // }
+      return tasksResult
     },
     getMyTasks (state, getters){
       if(getters.getUser){
