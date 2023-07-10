@@ -6,6 +6,7 @@ import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import ProjectsPage from '@/pages/ProjectsPage.vue'
 import ProjectDetailPage from '@/pages/ProjectDetailPage.vue'
+import ProfilePage from '@/pages/ProfilePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,14 @@ const router = createRouter({
       path: '/my-tasks',
       name: 'My tasks',
       component: MyTasksPage,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: ProfilePage,
       meta: {
         requiresAuth: true
       }

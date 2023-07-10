@@ -1,4 +1,4 @@
-import { auth, db, collection, addDoc, query, getDocs } from '../firebase'
+import { auth, db, collection, addDoc, query, getDocs, doc, setDoc } from '../firebase'
 import router from '../router'
 
 export default {
@@ -11,7 +11,6 @@ export default {
         },
         refreshUsers(state, users) {
             state.users = users
-            console.log(users)
         },
     },
     actions: {
@@ -19,26 +18,35 @@ export default {
             let newUser = {
                 name,
                 email,
+                avatar: '',
                 id,
                 role: 'user'
             }
             try {
-                const docRef = await addDoc(collection(db, "users"), newUser);
+                const userRef = doc(db, 'users', id);
+                await setDoc(userRef, newUser , { merge: true });
+                //const docRef = await addDoc(collection(db, "users"), newUser);
                 commit('addUser', newUser)
             } catch (e) {
                 console.error("Error adding document: ", e);
             }
         },
-        async refreshUsers({ commit }) {
-            //commit('refreshTasks')
-            const q = query(collection(db, "users"));
-            const users = await getDocs(q);
-            let formatData = []
-            users.forEach((doc) => {
-              // doc.data() is never undefined for query doc snapshots
-              formatData.push(doc.data());
-            });
-            commit('refreshUsers', formatData)
+        async refreshUsers({ commit,dispatch }) {
+            dispatch('setLoading', true)
+            try {
+                const q = query(collection(db, "users"));
+                const users = await getDocs(q);
+                let formatData = []
+                users.forEach((doc) => {
+                formatData.push(doc.data());
+                });
+                commit('refreshUsers', formatData)
+                console.log('пользователи загружены')
+            } catch (e) {
+                dispatch('setLoading', false)
+                console.error("Error adding document: ", e);
+            }    
+            
         },
     },
     getters: {
@@ -46,16 +54,14 @@ export default {
             return state.users
         },
         getAuthUser (state, getters){
-            console.log(getters.getUser)
             if(getters.getUser){
+                console.log('загрузка пользователя', state.users)
                 return state.users.find(user => user.id === getters.getUser.uid)
             }
             //return state.users.filter(task => task.author === getters.getUser.uid)
         },
         getUserById: state => id => {
-            console.log(state.users);
             return state.users.find(user => user.id === id)
-            
         }
     }
   }

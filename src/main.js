@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
 
 // UI 
 import AppButton from '@/components/UI/Controls/Button.vue'
@@ -14,7 +16,7 @@ import Message from '@/components/UI/Message.vue'
 
 const app = createApp(App)
 
-app.use(router).use(store)
+app.use(router).use(store).use(VCalendar, {})
 
 app.component('AppButton', AppButton);
 app.component('AppInput', AppInput);

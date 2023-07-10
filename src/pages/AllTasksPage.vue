@@ -7,7 +7,7 @@
       <Search />
       <Filter />
     </div>
-    <TasksList :abilityToAdd="false" :tasks="this.$store.getters.getAllTasks" />
+    <TasksList :tasks="this.$store.getters.getAllTasks" />
   </div>
 </template>
 
@@ -37,6 +37,6 @@ export default {
   },
   mounted (){
     this.$store.dispatch('hidePanel')
-  }
+  },
 }
 </script>

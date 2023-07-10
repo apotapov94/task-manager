@@ -4,17 +4,20 @@ export default {
             filters: false,
             projects: false,
             users: false,
-            priority: false
+            priority: false,
+            datePicker: false
         }
     },
     mutations: {
       closeContextBlock (state, block){
         if(block === 'all'){
             for (let contextBlock in state.blocks) {
-                state.blocks[contextBlock] = false
+                if(contextBlock !== 'datePicker'){
+                    state.blocks[contextBlock] = false
+                }
             }
         } else {
-            state.blocks[block] == false
+            state.blocks[block] = false
         }
       },
       openContextBlock (state, block){

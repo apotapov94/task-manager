@@ -5,12 +5,20 @@ export default {
     mode: null,
     tasks: [],
     taskToShowId: null,
-    viewMode: 'grid'
+    viewMode: 'grid',
+    editedFields: {
+      title: '',
+      descr: '',
+      executor: '',
+      project: '',
+      priority: '',
+      date: ''
+    },
+    calendarEditValue: ''
   },
   mutations: {
     addTask(state, newTask) {
       state.tasks.push(newTask)
-      //localStorage.tasks = JSON.stringify(state.tasks)
     },
     refreshTasks(state, tasks) {
       state.tasks = tasks
@@ -26,11 +34,8 @@ export default {
     setMode (state, mode){
       state.mode = mode
     },
-    saveDescr (state, {descr, id}){
-
-    },
-    saveTitle (state, {descr, id}){
-
+    writeEditedField (state, {field, value}){
+      state.editedFields[field] = value
     },
     switchMode (state, mode){
       state.viewMode = mode
@@ -44,9 +49,28 @@ export default {
         }
       })
       state.tasks = state.tasks
+    },
+    initialEdit (state, task){
+      state.editedFields = {
+        title: task.title,
+        descr: task.descr,
+        executor: task.executor,
+        project: task.project,
+        priority: task.priority,
+        date: task.date
+      }
+    },
+    updateDate (state, date){
+      state.calendarEditValue = date
     }
   },
   actions: {
+    updateDate ({commit}, payload){
+      commit('updateDate', payload)
+    },
+    initialEdit ({commit}, payload){
+      commit('initialEdit', payload)
+    },
     async addTask ({commit, dispatch},){
       dispatch('setLoading', true)
       const authorId = this.getters.getUser.uid
@@ -64,7 +88,7 @@ export default {
           setTimeout(function(){
             dispatch('hideMessage')
             dispatch('hidePanel')
-          }, 2000)
+          }, 1000)
           
       } catch (e) {
           dispatch('setLoading', false)
@@ -82,7 +106,7 @@ export default {
         setTimeout(function(){
           dispatch('hideMessage')
           dispatch('hidePanel')
-        }, 2000
+        }, 1000
         )
         commit('deleteTask', payload)
       } catch (e) {
@@ -90,18 +114,25 @@ export default {
           console.error("Error adding document: ", e);
       }
     },
-    async refreshTasks({ commit }) {
-      //commit('refreshTasks')
-      const q = query(collection(db, "tasks"), orderBy('date', 'asc'));
-      const tasks = await getDocs(q);
-      let formatData = []
-      tasks.forEach((task) => {
-        //console.log(doc)
-        // doc.data() is never undefined for query doc snapshots
-        const taskData = Object.assign(task.data(), {id: task.id})
-        formatData.push(taskData);
-      });
-      commit('refreshTasks', formatData)
+    async refreshTasks({ commit, dispatch }) {
+      dispatch('setLoading', true)
+      try {
+        const q = query(collection(db, "tasks"), orderBy('date', 'asc'));
+        const tasks = await getDocs(q);
+        let formatData = []
+        tasks.forEach((task) => {
+          //console.log(doc)
+          // doc.data() is never undefined for query doc snapshots
+          const taskData = Object.assign(task.data(), {id: task.id})
+          formatData.push(taskData);
+        });
+        commit('refreshTasks', formatData)
+        console.log('задачи загружены')
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
+      
     },
     setTaskToShow ({ commit }, taskId){
       commit('setTaskToShow', taskId)
@@ -109,33 +140,16 @@ export default {
     setMode({ commit }, payload){
       commit('setMode', payload)
     },
-    async saveDescr ({ commit, dispatch }, { id, value }){
-      
+    async saveTask ({ commit, dispatch }, {fields, id}){
       dispatch('setLoading', true)
       try {
-        console.log(id, value)
+        console.log(id)
         const taskRef = doc(db, 'tasks', id);
-        await setDoc(taskRef, { descr: value }, { merge: true });
+        await setDoc(taskRef, fields, { merge: true });
         console.log('success')
         dispatch('setLoading', false)
         dispatch('setMode', null)
         dispatch('refreshTasks')
-      } catch (e) {
-          dispatch('setLoading', false)
-          console.error("Error adding document: ", e);
-      }
-    },
-    async saveTitle ({ commit, dispatch }, { id, value }){
-      dispatch('setLoading', true)
-      try {
-        console.log(id, value)
-        const taskRef = doc(db, 'tasks', id);
-        await setDoc(taskRef, { title: value }, { merge: true });
-        console.log('success')
-        dispatch('setLoading', false)
-        dispatch('setMode', null)
-        dispatch('refreshTasks')
-        dispatch('setHeading', value);
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -158,6 +172,9 @@ export default {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
       }
+    },
+    writeField ({commit}, payload){
+      commit('writeEditedField', payload)
     }
   },
   getters: {
@@ -202,6 +219,8 @@ export default {
           tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
         }
         return tasksResult
+      } else {
+        return []
       }
     },
     getAllTasksCount (state){
@@ -229,6 +248,12 @@ export default {
     },
     getTasksByProjectId: state => id => {
       return state.tasks.filter(task => task.project === id)
+    },
+    getEditedFields (state){
+      return state.editedFields
+    },
+    getCalendarValue (state){
+      return state.calendarEditValue
     }
   }
 }

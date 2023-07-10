@@ -10,10 +10,11 @@
       <div class="header__bottom" :class="{active: showMenu}">
         <div class="header__profile" v-if="authUser && !loading">
           <div class="header__profile-left">
-            <img src="@/assets/img/user-profile.png" alt="">
+            <img v-if="authUser.avatar" :src="authUser.avatar" alt="">
+            <img v-else src="@/assets/img/user-profile.png" alt="">
           </div>
           <div class="header__profile-right">
-            <div class="header__profile-name">{{ authUser.name }}</div>
+            <div class="header__profile-name"><router-link to="/profile">{{ authUser.name }}</router-link></div>
             <div class="header__profile-email">{{ authUser.email }}</div>
           </div>
         </div>
@@ -61,10 +62,6 @@
 
 <script>
 export default {
-  beforeMount (){
-    this.$store.dispatch('fetchUser')
-    
-  },
   computed: {
     user (){
       return this.$store.getters.getUser
@@ -77,6 +74,9 @@ export default {
     },
     loading (){
       return this.$store.getters.getLoading
+    },
+    avatar (){
+      return this.$store.getters.getAuthUserAvatar
     }
   },
   methods: {
@@ -89,8 +89,8 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('refreshTasks');
-    this.$store.dispatch('refreshProjects');
+    // this.$store.dispatch('refreshTasks');
+    // this.$store.dispatch('refreshProjects');
   }
 }
 </script>

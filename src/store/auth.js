@@ -10,7 +10,6 @@ export default {
     mutations: {
         setUser (state, user){
             state.user = user
-            console.log(state.user)
         },
         clearUser (state){
             state.user = null
@@ -88,17 +87,16 @@ export default {
         fetchUser ({commit, dispatch}){
             dispatch('setLoading', true)
             auth.onAuthStateChanged(async user => {
+                console.log('авторизованный пользователь загружается')
                 if(user === null){
                     commit('clearUser')
                 } else {
                     commit('setUser', user)
-                    
                     if(router.isReady() && router.currentRoute.value.path === '/login'){
                         router.push('/')
                     }
-
+                    console.log('авторизованный пользователь загружен')
                 }
-                dispatch('setLoading', false)
             })
         },
         setLoading ({commit}, payload){

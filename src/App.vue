@@ -17,12 +17,17 @@ export default {
     Header,
     RightPanel
   },
-  beforeMount (){
+  beforeCreate (){
+    this.$store.dispatch('fetchUser');
     this.$store.dispatch('refreshUsers');
+  },
+  created (){
+    this.$store.dispatch('refreshTasks');
+    this.$store.dispatch('refreshProjects');
   },
   methods: {
     hidePopups(){
-      if(!event.target.classList.contains('context-block') && !event.target.classList.contains('context-block-link')){
+      if(!event.target.classList.contains('context-block') && !event.target.classList.contains('context-block-link') && !event.currentTarget.classList.contains('vc-container')){
         this.$store.dispatch('closeContextBlock', 'all')
       } else {
         return false

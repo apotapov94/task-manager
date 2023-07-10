@@ -10,6 +10,7 @@ import filter from './filter'
 import addProjectForm from './addProjectForm'
 import projects from './projects'
 import contextBlocks from './contextBlocks'
+import files from './files'
 
 export default createStore({
   modules: {
@@ -23,6 +24,7 @@ export default createStore({
     filter,
     projects,
     addProjectForm,
-    contextBlocks
+    contextBlocks,
+    files
   }
 })

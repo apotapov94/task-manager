@@ -1,17 +1,19 @@
 <template>
   <section>
-    <div :class="`tasks-list ${viewMode}`">
+    <AppButton class="add-task-btn" v-if="abilityToAdd" @click="showAddTaskForm">Добавить задачу</AppButton>
+    <div v-if="!loading" :class="`tasks-list ${viewMode}`">
       <TaskCard v-for="task in tasks" :task="task" />
     </div>
-    <button v-if="abilityToAdd" @click="showAddTaskForm" class="btn btn-primary">Добавить задачу</button>
+    <Throbber :view="view" v-if="loading" />
   </section>
 </template>
 
 <script>
 import TaskCard from '@/components/Tasks/Card.vue';
+import Throbber from '@/components/Tasks/Throbber.vue'
 export default {
   components: {
-    TaskCard
+    TaskCard, Throbber
   },
   computed: {
     viewMode (){
@@ -23,6 +25,9 @@ export default {
     },
     filter (){
       return this.$store.getters.getFilter
+    },
+    loading (){
+      return this.$store.getters.getLoading
     }
   },
   props: {

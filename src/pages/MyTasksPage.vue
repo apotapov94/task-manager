@@ -4,6 +4,7 @@
       <div class="top-panel">
         <ViewSwitcher />
         <StatusFilter />
+        <Search />
         <Filter executorFilterExclude />
       </div>
       <TasksList :tasks="this.$store.getters.getMyTasks" />
@@ -17,6 +18,7 @@ import AddTaskForm from '@/components/AddTaskForm.vue'
 import ViewSwitcher from '@/components/UI/ViewSwitcher.vue'
 import StatusFilter from '@/components/UI/StatusFilter.vue'
 import Filter from '@/components/UI/Filter.vue'
+import Search from '@/components/UI/Search.vue'
 export default {
 components: {
     Title,
@@ -24,7 +26,8 @@ components: {
     AddTaskForm,
     ViewSwitcher,
     StatusFilter,
-    Filter
+    Filter,
+    Search
 },
 computed: {
     newTask() {
