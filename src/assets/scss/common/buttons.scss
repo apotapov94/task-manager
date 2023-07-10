@@ -23,6 +23,13 @@
       background: $success-hover;
     }
   }
+  &.btn-warning {
+    background: $warning-color;
+    color: #444444;
+    &:hover {
+      background: #ffe275;
+    }
+  }
 
   // danger btn
   &.btnDanger {

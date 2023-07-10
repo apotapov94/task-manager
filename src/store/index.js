@@ -9,6 +9,8 @@ import comments from './comments'
 import filter from './filter'
 import addProjectForm from './addProjectForm'
 import projects from './projects'
+import contextBlocks from './contextBlocks'
+import files from './files'
 
 export default createStore({
   modules: {
@@ -21,6 +23,8 @@ export default createStore({
     comments,
     filter,
     projects,
-    addProjectForm
+    addProjectForm,
+    contextBlocks,
+    files
   }
 })

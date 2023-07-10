@@ -5,8 +5,9 @@
       <ViewSwitcher />
       <StatusFilter />
       <Search />
+      <Filter />
     </div>
-    <TasksList :abilityToAdd="false" :tasks="this.$store.getters.getAllTasks" />
+    <TasksList :tasks="this.$store.getters.getAllTasks" />
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import AddTaskForm from '@/components/AddTaskForm.vue'
 import ViewSwitcher from '@/components/UI/ViewSwitcher.vue'
 import StatusFilter from '@/components/UI/StatusFilter.vue'
 import Search from '@/components/UI/Search.vue'
+import Filter from '@/components/UI/Filter.vue'
 
 export default {
   components: {
@@ -25,12 +27,16 @@ export default {
     AddTaskForm,
     ViewSwitcher,
     StatusFilter,
-    Search
+    Search,
+    Filter
   },
   computed: {
     newTask() {
       return this.$store.getters.getNewTask
     }
+  },
+  mounted (){
+    this.$store.dispatch('hidePanel')
   },
 }
 </script>

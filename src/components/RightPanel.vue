@@ -4,29 +4,30 @@
       <h2>{{ view.heading }}</h2>
     </div>
     <div v-if="view.view == 'task-detail'" class="title">
-      <h2 v-show="mode !== 'edit-title'" @click="setMode('edit-title')">{{ view.heading }}</h2>
-      <input @keyup.enter="saveTitle(curTaskId)" v-show="mode === 'edit-title'" :value="view.heading" type="text">
+      <h2 v-show="mode !== 'edit'" v-if="task">{{ task.title }}</h2>
+      <input @input="writeField({field: 'title', value: 'input'})" v-show="mode === 'edit'" :value="editedFields.title" type="text">
+      <span class="edit-icon" v-if="mode === 'edit'"><EditIcon /></span>
     </div>
     <Message v-if="message.show" :type="message.type" :text="message.text" />
     <AddTaskForm v-if="view.view == 'addTask'" />
     <AddProjectForm v-if="view.view == 'addProject'" />
-    <TaskDetail v-if="view.view == 'task-detail'" />
+    <TaskDetail :task="task" v-if="view.view == 'task-detail'" />
     <div v-if="loading" class="modals-container__mask">
       <Loader />
     </div>
     <div class="close-btn" @click="hideRightPanel"><img src="@/assets/img/arrow-right.png" alt=""></div>
   </aside>
   <div class="mask" :class="{ active: view.mask }" @click="hideRightPanel"></div>
-
 </template>
 
 <script>
 import AddTaskForm from '@/components/AddTaskForm.vue'
 import AddProjectForm from '@/components/AddProjectForm.vue'
 import TaskDetail from '@/components/Tasks/Detail.vue'
+import EditIcon from '@/components/icons/iconEdit.vue'
 export default {
   components: {
-    AddTaskForm, AddProjectForm, TaskDetail
+    AddTaskForm, AddProjectForm, TaskDetail, EditIcon
   },
   computed: {
     view() {
@@ -50,6 +51,12 @@ export default {
     authUser (){
       return this.$store.getters.getAuthUser
     },
+    editedFields (){
+      return this.$store.getters.getEditedFields
+    },
+    task (){
+      return this.$store.getters.getTaskById
+    },
   },
   methods: {
     hideRightPanel() {
@@ -59,20 +66,12 @@ export default {
       //this.$store.dispatch('setHeading', '')
       //this.$store.dispatch('hideView')
     },
-    setMode (mode){
-      if(this.authUser.id == this.task.author){
-        this.$store.dispatch('setMode', mode)
-        let input = event.target.nextSibling;
-        console.log(input)
-        setTimeout(function(){
-          input.focus();
-        }, 10)
-      }  
+    writeField ({field, value}){
+      if(value === 'input'){
+          value = event.target.value
+      }
+      this.$store.dispatch('writeField', {field, value})
     },
-    saveTitle (id){
-      let value = event.target.value
-      this.$store.dispatch('saveTitle', { id, value })
-    }
   }
 }
 </script>

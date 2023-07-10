@@ -4,6 +4,7 @@
       <div class="task-card__title">{{ task.title }}</div>
       <div class="task-card__executor">
         Исполнитель: <span>{{ getUser(task.executor).name }}</span>
+        <img class="task-card__executor-avatar" v-if="getUser(task.executor).avatar" :src="getUser(task.executor).avatar" alt="">
       </div>
       <div class="task-card__project" v-if="getProject(task.project)">
         Проект: <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
@@ -12,7 +13,7 @@
     
     <div class="task-card__footer">
       <div class="task-card__date">
-        {{ dateFormat(task.date) }}
+        {{ task.date }}
       </div>
       <div :class="`task-card__priority ${task.priority}`">
         Приоритет: <span>{{ getPriority(task.priority) }}</span>

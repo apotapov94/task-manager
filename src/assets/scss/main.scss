@@ -218,6 +218,14 @@ section,
     padding: 8px;
     border-radius: 10px;
   }
+  &__profile-left {
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
   &__profile-email {
     margin-top: 4px;
     color: #969696;
@@ -255,10 +263,23 @@ main {
   //background: #0000004f;
 }
 .tasks-list {
+  &.throbber {
+    .task-card {
+      height: 180px;
+      animation: flicker 1s ease-out infinite;
+    }
+  }
   &.grid {
     display: flex;
     flex-wrap: wrap;
     .task-card {
+      &__executor-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-left: 8px;
+        object-fit: cover;
+      }
       width: 295px;
       &__executor {
         font-size: 14px;
@@ -289,6 +310,7 @@ main {
         margin: 0;
         display: flex;
         flex-direction: row;
+        align-items: center;
       }
       
       &__footer {
@@ -346,10 +368,97 @@ main {
   }
 }
 
+
+
+.search {
+  input {
+    max-width: 170px;
+  }
+}
+
+.add-task-btn {
+  margin-bottom: 16px;
+}
+
+.add-filter {
+  position: relative;
+  &__link {
+    cursor: pointer;
+    &:hover {
+      color: $success-color;
+    }
+  }
+}
+.filters {
+  position: absolute;
+  background: #464646;
+  box-shadow: 1px 1px 6px #353535;
+  z-index: 101;
+  padding: 16px;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+  grid-gap: 4px;
+}
+
+.added-filters {
+  display: flex;
+  grid-gap: 16px;
+}
+.filter {
+  display: flex;
+  grid-gap: 16px;
+  align-items: center;
+  &__item {
+    cursor: pointer;
+    &:hover {
+      color: $success-color;
+    }
+    &.selected {
+      color: $success-color;
+    }
+  }
+  .reset-filter {
+    svg {
+      fill: $danger-color;
+    }
+  }
+  .active-value {
+    color: $success-color
+  }
+  &__active-filter {
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: #959595;
+    span {
+      margin-left: 2px;
+      cursor: pointer;
+      &:hover {
+        color: $success-color;
+      }
+    }
+  }
+}
+
+.context-block {
+  position: absolute;
+  background: #464646;
+  top: 36px;
+  box-shadow: 1px 1px 6px #353535;
+  z-index: 101;
+  padding: 16px;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+  grid-gap: 4px;
+}
+
 .top-panel {
   display: inline-flex;
   align-items: center;
   grid-gap: 16px;
+  font-size: 14px;
   margin-bottom: 32px;
   background: #464646;
   border-radius: 5px;
@@ -459,22 +568,31 @@ main {
   }
 }
 
+.tooltip {
+  position: absolute;
+  padding: 8px;
+  background: #464646;
+  border-radius: 10px;
+  display: none;
+}
+
+.date-picker__btns {
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
 .task-detail {
   &__priority {
-    &.standart {
-      span {
-        color: $success-color;
-      }
+    span.standart {
+      color: $success-color;
     }
-    &.high {
-      span {
-        color: $warning-color;
-      }
+    span.high {
+      color: $warning-color;
     }
-    &.very-high {
-      span {
-        color: $danger-color;
-      }
+    span.very-high {
+      color: $danger-color;
     }
   }
   &__created-at {
@@ -493,17 +611,27 @@ main {
     align-items: center;
     margin-bottom: 32px;
   }
+  &__edit-btns {
+    display: flex;
+    grid-gap: 8px;
+  }
   &__info {
     color: #979797;
     display: flex;
     align-items: center;
     grid-gap: 4px;
+    position: relative;
+    
     span {
       color: #fff;
     }
     &.user {
       span {
         color: $link-color;
+      }
+      .context-block {
+        top: 100%;
+        left: 89px;
       }
     }
     &.status {
@@ -519,13 +647,25 @@ main {
     }
   }
   &__description {
+    position: relative;
     textarea {
       background: transparent;
       overflow: hidden;
       color: #fff;
       padding: 0;
-      height: 300px;
       border-radius: 0;
+      &:focus {
+        background: #0000002b;
+      }
+      
+    }
+    &:hover {
+      textarea {
+        background: #0000002b;
+      }
+      .edit-icon {
+        display: block;
+      }
     }
   }
   &__buttons {
@@ -543,10 +683,35 @@ main {
   }
 }
 
+.edit-icon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  svg {
+    fill: $warning-color;
+    width: 18px;
+    height: 18px;
+  }
+}
+
 .small-icon {
   cursor: pointer;
   img {
     height: 16px;
+  }
+  &.edit {
+    svg {
+      fill: $warning-color;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  &:hover {
+    &>.tooltip {
+      display: block;
+    }
   }
 }
 .small-icons {
@@ -660,12 +825,24 @@ main {
   }
   .title {
     margin-bottom: $m4;
+    position: relative;
     input {
       padding: 0;
       background: transparent;
       border-radius: 0;
       color: #fff;
       font-size: 24px;
+      &:focus {
+        background: #0000002b;
+      }
+    }
+    &:hover {
+      input {
+        background: #0000002b;
+      }
+      .edit-icon {
+        display: block;
+      }
     }
   }
   &.show {
@@ -720,6 +897,17 @@ form {
   }
   &__text {
     margin-top: 8px;
+  }
+}
+
+.profile {
+  &__image {
+    img {
+      object-fit: cover;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+    }
   }
 }
 
@@ -790,6 +978,12 @@ form {
     &.grid {
       grid-template-columns: repeat(3,1fr);
     }  
+    &.list {
+      .task-card {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
   }
 }
 @media(max-width: 1100px){
@@ -862,6 +1056,17 @@ form {
     &.grid {
       grid-template-columns: repeat(1,1fr);
     }  
+    &.list {
+      .task-card {
+        flex-direction: column;
+        align-items: flex-start;
+        grid-gap: 16px;
+        &__header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
   }
   .modals-container {
     width: 100%;
@@ -883,3 +1088,15 @@ form {
     }
   }
 }
+@media(max-width: 360px){
+  .tasks-list {
+    &.list {
+      .task-card {
+        &__footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+}  

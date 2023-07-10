@@ -45,17 +45,25 @@ export default {
                 }
             }
         },
-        async refreshProjects({ commit }) {
-            const q = query(collection(db, "projects"), orderBy('created', 'asc'));
-            const projects = await getDocs(q);
-            let formatData = []
-            projects.forEach((project) => {
-              //console.log(doc)
-              // doc.data() is never undefined for query doc snapshots
-              const projectData = Object.assign(project.data(), {id: project.id})
-              formatData.push(projectData);
-            });
-            commit('refreshProjects', formatData)
+        async refreshProjects({ commit, dispatch }) {
+            dispatch('setLoading', true)
+            try {
+                const q = query(collection(db, "projects"), orderBy('created', 'asc'));
+                const projects = await getDocs(q);
+                let formatData = []
+                projects.forEach((project) => {
+                //console.log(doc)
+                // doc.data() is never undefined for query doc snapshots
+                const projectData = Object.assign(project.data(), {id: project.id})
+                formatData.push(projectData);
+                });
+                console.log('проекты загружены')
+                commit('refreshProjects', formatData)
+                dispatch('setLoading', false)
+            } catch (e) {
+                dispatch('setLoading', false)
+                console.error("Error adding document: ", e);
+            } 
         },
     },
     getters: {

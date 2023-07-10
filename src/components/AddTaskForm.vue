@@ -36,14 +36,27 @@
           <option v-for="project in projects" :value="project.id">{{ project.title }}</option>
         </select>
       </div>
-      <AppInput 
+      <div class="input-group">
+        <VDatePicker 
+        is-required
+        v-model.string="date" 
+        :masks="{modelValue: 'DD.MM.YYYY'}" 
+        @change="v$.date.$touch()"
+        :errors="v$.date.$errors"/>
+        <p class="error-text" v-for="error of v$.executor.$errors" :key="error.$uid">
+          {{ error.$message }}
+        </p>
+      </div>
+      
+      <!-- <AppInput 
         type="date" 
         v-model="date" 
         placeholder="Дата"
         :class="{ error: v$.date.$error }"
         @change="v$.date.$touch()"
         :errors="v$.date.$errors">
-      </AppInput>
+      </AppInput> -->
+      
       <AppTextArea placeholder="Описание" v-model="descr"></AppTextArea>
       <AppButton>Добавить задачу</AppButton>
     </form>
