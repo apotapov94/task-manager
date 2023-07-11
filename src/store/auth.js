@@ -95,7 +95,12 @@ export default {
                     if(router.isReady() && router.currentRoute.value.path === '/login'){
                         router.push('/')
                     }
-                    console.log('авторизованный пользователь загружен')
+                    
+                    console.log('авторизованный пользователь загружен', user.uid)
+                    if(this.getters.getAuthUser){
+                        dispatch('initialProfile', this.getters.getAuthUser)
+                        console.log('поменялся профиль')
+                    }
                 }
             })
         },

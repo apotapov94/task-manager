@@ -1,4 +1,5 @@
-import { auth, db, collection, addDoc, query, where, getDocs, orderBy, limit, deleteDoc, doc, setDoc } from '../firebase'
+import { auth, db, collection, addDoc, query, where, getDocs, getDoc, orderBy, limit, deleteDoc, doc, setDoc, startAfter } from '../firebase'
+import { sendNotify } from '../notifications'
 
 export default {
   state: {
@@ -22,6 +23,9 @@ export default {
     },
     refreshTasks(state, tasks) {
       state.tasks = tasks
+    },
+    fetchTasks (state, tasks){
+      state.tasks = [...state.tasks, ...tasks]
     },
     deleteTask(state, id) {
       state.tasks.forEach(function (elem, index) {
@@ -65,11 +69,38 @@ export default {
     }
   },
   actions: {
+    sendNotify (){
+      sendNotify()
+    },
     updateDate ({commit}, payload){
       commit('updateDate', payload)
     },
     initialEdit ({commit}, payload){
       commit('initialEdit', payload)
+    },
+    async addManyTasks ({commit, dispatch},){
+      dispatch('setLoading', true)
+      try {
+          for(let i = 0; i <= 500; i++){
+            const newTask = {
+              created: new Date(Date.now()).toLocaleString(),
+              status: 'active',
+              author: 'QwI57L36qXVuA8EIlMqn6eZK01p1',
+              date: '13.07.2023',
+              descr: 'тестовое описание',
+              title: `тестовая задача ${i}`,
+              priority: 'standart',
+              executor: 'QwI57L36qXVuA8EIlMqn6eZK01p1',
+            }
+            const docRef = await addDoc(collection(db, "tasks"), newTask);
+            commit('addTask', Object.assign(newTask,{id: docRef.id}))
+          }  
+          dispatch('setLoading', false)
+          console.log('задачи добавлены')
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
     },
     async addTask ({commit, dispatch},){
       dispatch('setLoading', true)
@@ -89,7 +120,8 @@ export default {
             dispatch('hideMessage')
             dispatch('hidePanel')
           }, 1000)
-          
+          const notify = Object.assign(newTask,{id: docRef.id, action: 'add task', username: this.getters.getAuthUser.name, email: this.getters.getAuthUser.email})
+          sendNotify(notify)
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -108,7 +140,33 @@ export default {
           dispatch('hidePanel')
         }, 1000
         )
+        const deletedTask = this.getters.getTaskById(payload)
+        const notify = Object.assign(deletedTask,{action: 'delete task', username: this.getters.getAuthUser.name, email: this.getters.getAuthUser.email})
+        sendNotify(notify)
         commit('deleteTask', payload)
+      } catch (e) {
+          dispatch('setLoading', false)
+          console.error("Error adding document: ", e);
+      }
+    },
+    async fetchTasks({ commit, dispatch }, payload){
+      dispatch('setLoading', true)
+      try {
+        const lastDoc = await getDoc(doc(collection(db, "tasks"), payload))
+        console.log(lastDoc.data())
+        const q = query(collection(db, "tasks"), orderBy('date', 'asc'), startAfter(lastDoc), limit(20));
+        const tasks = await getDocs(q);
+        let formatData = []
+        tasks.forEach((task) => {
+          //console.log(doc)
+          // doc.data() is never undefined for query doc snapshots
+          const taskData = Object.assign(task.data(), {id: task.id})
+          formatData.push(taskData);
+        });
+        console.log(payload)
+        commit('fetchTasks', formatData)
+        dispatch('setLoading', false)
+        console.log('новая пачка задач подгружена')
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -117,7 +175,7 @@ export default {
     async refreshTasks({ commit, dispatch }) {
       dispatch('setLoading', true)
       try {
-        const q = query(collection(db, "tasks"), orderBy('date', 'asc'));
+        const q = query(collection(db, "tasks"), orderBy('date', 'asc'), limit(20));
         const tasks = await getDocs(q);
         let formatData = []
         tasks.forEach((task) => {
@@ -232,13 +290,16 @@ export default {
         return myTasks.length
       }
     },
-    getTaskById (state){
+    getTaskToShow (state){
       if(state.taskToShowId){
         return state.tasks.find(task => task.id === state.taskToShowId)
       }
     },
     getActiveTaskId (state){
       return state.taskToShowId
+    },
+    getTaskById: state => id => {
+      return state.tasks.find(task => task.id === id)
     },
     getMode (state){
       return state.mode

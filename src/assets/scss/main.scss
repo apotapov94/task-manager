@@ -312,19 +312,25 @@ main {
         flex-direction: row;
         align-items: center;
       }
-      
-      &__footer {
-        margin: 0;
-        grid-gap: 16px;
-        justify-content: flex-start;
+      &__executor-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-left: 8px;
+        object-fit: cover;
       }
       &__executor {
         font-size: 14px;
         color: #979797;
         min-width: 25%;
         span {
-          color: #fff;
+          color: $link-color;
         }
+      }
+      &__footer {
+        margin: 0;
+        grid-gap: 16px;
+        justify-content: flex-start;
       }
       &__title {
         font-size: 20px;
@@ -902,15 +908,55 @@ form {
 
 .profile {
   &__image {
+    label {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      svg {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+      svg.user-icon {
+        display: block;
+        fill: $success-color;
+      }
+      &:hover {
+        &:before {
+          background: #70b63352;
+          display: block;
+        }
+        svg {
+          display: block;
+        }  
+      }
+      &:before {
+        content: '';
+        display: none;
+        position: absolute;
+        background: transparent;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
     img {
       object-fit: cover;
       width: 200px;
       height: 200px;
       border-radius: 50%;
     }
+    input {
+      display: none;
+    }
   }
 }
-
 .loader {
   width: 48px;
   height: 48px;

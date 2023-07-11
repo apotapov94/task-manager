@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
+import auth from './auth'
 import tasks from './tasks'
 import newTask from './newTask'
-import auth from './auth'
 import users from './users'
 import rightPanel from './rightPanel'
 import menu from './menu'
@@ -11,13 +11,14 @@ import addProjectForm from './addProjectForm'
 import projects from './projects'
 import contextBlocks from './contextBlocks'
 import files from './files'
+import editProfileForm from './editProfileForm'
 
 export default createStore({
   modules: {
+    auth,
     tasks,
     newTask,
     rightPanel,
-    auth,
     users,
     menu,
     comments,
@@ -25,6 +26,7 @@ export default createStore({
     projects,
     addProjectForm,
     contextBlocks,
-    files
+    files,
+    editProfileForm
   }
 })

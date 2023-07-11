@@ -10,8 +10,10 @@
       <div class="header__bottom" :class="{active: showMenu}">
         <div class="header__profile" v-if="authUser && !loading">
           <div class="header__profile-left">
-            <img v-if="authUser.avatar" :src="authUser.avatar" alt="">
-            <img v-else src="@/assets/img/user-profile.png" alt="">
+            <router-link to="/profile">
+              <img v-if="authUser.avatar" :src="authUser.avatar" alt="">
+              <img v-else src="@/assets/img/user-profile.png" alt="">
+            </router-link>
           </div>
           <div class="header__profile-right">
             <div class="header__profile-name"><router-link to="/profile">{{ authUser.name }}</router-link></div>

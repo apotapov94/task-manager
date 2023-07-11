@@ -3,22 +3,30 @@
     <div class="page-wrapper">
       <div class="profile" v-if="authUser">
         <div class="profile__image">
-            <img :src="authUser.avatar" alt="">
+            <label for="changeAvatar">
+                <img v-if="authUser.avatar" :src="authUser.avatar" alt="">
+                <IconUser class="user-icon" v-else />
+                <IconPlus />
+            </label>
+            <input id="changeAvatar" type="file" @change="uploadAvatar">
         </div>
-        <input type="file" @change="uploadAvatar">
+        
         <div class="profile__info">
-            <div class="profile__name">{{ authUser.name }}</div>
-            <div class="profile__email">{{ authUser.email }}</div>
         </div>
+        <EditProfileForm :user="authUser" />
       </div>
+      
     </div>
 </template>
 
 <script>
     import Title from '@/components/UI/Title.vue'
+    import EditProfileForm from '@/components/EditProfileForm.vue'
+    import IconPlus from '@/components/icons/iconPlus.vue'
+    import IconUser from '@/components/icons/iconUser.vue'
     export default {
         components: {
-            Title
+            Title, EditProfileForm, IconPlus, IconUser
         },
         computed: {
             authUser (){

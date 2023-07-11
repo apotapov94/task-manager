@@ -4,6 +4,7 @@ import router from '../router'
 export default {
     state: {
         users: [],
+        userToShowId: null
     },
     mutations: {
         addUser (state, user){
@@ -12,6 +13,9 @@ export default {
         refreshUsers(state, users) {
             state.users = users
         },
+        setUserToShow (state, id){
+            state.userToShowId = id
+        }
     },
     actions: {
         async addUser ({dispatch, commit}, {name, email, id}){
@@ -42,12 +46,16 @@ export default {
                 });
                 commit('refreshUsers', formatData)
                 console.log('пользователи загружены')
+                dispatch('fetchUser');
             } catch (e) {
                 dispatch('setLoading', false)
-                console.error("Error adding document: ", e);
+                console.error("Error refresh user: ", e);
             }    
             
         },
+        setUserToShow ({ commit }, payload){
+            commit('setUserToShow', payload)
+        }
     },
     getters: {
         getUsers (state){
@@ -55,13 +63,19 @@ export default {
         },
         getAuthUser (state, getters){
             if(getters.getUser){
-                console.log('загрузка пользователя', state.users)
-                return state.users.find(user => user.id === getters.getUser.uid)
+                console.log(getters.getUser.uid, state.users)
+                //console.log(state.users.find(user => user.id === getters.getUser.uid))
+                const authUser = state.users.find(user => user.id === getters.getUser.uid)
+                if(authUser){
+                    return authUser
+                }
             }
-            //return state.users.filter(task => task.author === getters.getUser.uid)
         },
         getUserById: state => id => {
             return state.users.find(user => user.id === id)
+        },
+        getUserToShow (state){
+            return state.users.find(user => user.id === state.userToShowId)
         }
     }
   }

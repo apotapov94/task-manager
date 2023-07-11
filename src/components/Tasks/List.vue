@@ -4,6 +4,7 @@
     <div v-if="!loading" :class="`tasks-list ${viewMode}`">
       <TaskCard v-for="task in tasks" :task="task" />
     </div>
+    <AppButton class="add-task-btn" @click="fetchTasks">Показать еще</AppButton>
     <Throbber :view="view" v-if="loading" />
   </section>
 </template>
@@ -45,10 +46,19 @@ export default {
     }
   },
   methods: {
+    fetchTasks (){
+      this.$store.dispatch('fetchTasks', this.tasks[this.tasks.length - 1].id);
+    },
     showAddTaskForm() {
       this.$store.dispatch('showPanel');
       this.$store.dispatch('showView', 'addTask');
       this.$store.dispatch('setHeading', 'Новая задача');
+    },
+    addTasks (){
+      this.$store.dispatch('addManyTasks');
+    },
+    sendNotify (){
+      this.$store.dispatch('sendNotify')
     }
   },
 }
