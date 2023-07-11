@@ -3,7 +3,7 @@
     <div class="task-card__header">
       <div class="task-card__title">{{ task.title }}</div>
       <div class="task-card__executor">
-        Исполнитель: <span>{{ getUser(task.executor).name }}</span>
+        Исполнитель: <span class="user-link" @click="showUserInfo">{{ getUser(task.executor).name }}</span>
         <img class="task-card__executor-avatar" v-if="getUser(task.executor).avatar" :src="getUser(task.executor).avatar" alt="">
       </div>
       <div class="task-card__project" v-if="getProject(task.project)">
@@ -49,10 +49,18 @@ export default {
       return formatedDate
     },
     showTaskDetail() {
+      if(!event.target.classList.contains('user-link')){
+        this.$store.dispatch('showPanel');
+        this.$store.dispatch('setTaskToShow', this.task.id)
+        this.$store.dispatch('showView', 'task-detail');
+        this.$store.dispatch('setHeading', this.task.title);
+      }
+    },
+    showUserInfo() {
       this.$store.dispatch('showPanel');
-      this.$store.dispatch('setTaskToShow', this.task.id)
-      this.$store.dispatch('showView', 'task-detail');
-      this.$store.dispatch('setHeading', this.task.title);
+      this.$store.dispatch('setUserToShow', this.task.executor)
+      this.$store.dispatch('showView', 'user-info');
+      this.$store.dispatch('setHeading', 'Информация о пользователе');
     },
     getPriority (priority){
       let priorityText

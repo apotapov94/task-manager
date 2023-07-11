@@ -9,9 +9,10 @@
       <span class="edit-icon" v-if="mode === 'edit'"><EditIcon /></span>
     </div>
     <Message v-if="message.show" :type="message.type" :text="message.text" />
-    <AddTaskForm v-if="view.view == 'addTask'" />
-    <AddProjectForm v-if="view.view == 'addProject'" />
-    <TaskDetail :task="task" v-if="view.view == 'task-detail'" />
+    <AddTaskForm v-if="view.view === 'addTask'" />
+    <AddProjectForm v-if="view.view === 'addProject'" />
+    <TaskDetail :task="task" v-if="view.view === 'task-detail'" />
+    <UserInfo :user="userToShow" v-if="view.view === 'user-info'" />
     <div v-if="loading" class="modals-container__mask">
       <Loader />
     </div>
@@ -23,11 +24,12 @@
 <script>
 import AddTaskForm from '@/components/AddTaskForm.vue'
 import AddProjectForm from '@/components/AddProjectForm.vue'
+import UserInfo from '@/components/UserInfo.vue'
 import TaskDetail from '@/components/Tasks/Detail.vue'
 import EditIcon from '@/components/icons/iconEdit.vue'
 export default {
   components: {
-    AddTaskForm, AddProjectForm, TaskDetail, EditIcon
+    AddTaskForm, AddProjectForm, TaskDetail, EditIcon, UserInfo
   },
   computed: {
     view() {
@@ -46,17 +48,14 @@ export default {
       return this.$store.getters.getMode
     },
     task (){
-      return this.$store.getters.getTaskById
-    },
-    authUser (){
-      return this.$store.getters.getAuthUser
+      return this.$store.getters.getTaskToShow
     },
     editedFields (){
       return this.$store.getters.getEditedFields
     },
-    task (){
-      return this.$store.getters.getTaskById
-    },
+    userToShow (){
+      return this.$store.getters.getUserToShow
+    }
   },
   methods: {
     hideRightPanel() {

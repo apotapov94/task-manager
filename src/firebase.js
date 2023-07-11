@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, limit, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDoc, getDocs, orderBy, limit, deleteDoc, doc, setDoc, startAfter } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 //import { getDatabase, ref, set } from "firebase/database";
 
@@ -77,5 +77,7 @@ export {
 	uploadBytes, 
 	storage, 
 	ref,
-	getDownloadURL
+	getDownloadURL,
+	startAfter,
+	getDoc
 };

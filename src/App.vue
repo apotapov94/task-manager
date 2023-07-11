@@ -18,7 +18,6 @@ export default {
     RightPanel
   },
   beforeCreate (){
-    this.$store.dispatch('fetchUser');
     this.$store.dispatch('refreshUsers');
   },
   created (){
