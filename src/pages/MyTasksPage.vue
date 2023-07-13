@@ -1,5 +1,5 @@
 <template>
-    <Title title="Задачи" />
+    <Title title="Мои Задачи" />
     <div class="page-wrapper">
       <div class="top-panel">
         <ViewSwitcher />
@@ -36,6 +36,9 @@ computed: {
 },
 mounted (){
     this.$store.dispatch('hidePanel')
+    this.$store.dispatch('closeMenu')
+    this.$store.dispatch('resetAllFilters')
+    this.$store.dispatch('resetSearch')
   }
 }
 </script>

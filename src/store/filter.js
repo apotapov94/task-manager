@@ -3,6 +3,7 @@ export default {
         status: 'all',
         search: '',
         showAddFilterPanel: false,
+        filtersCount: 0,
         project: {
           active: false,
           value: '',
@@ -38,6 +39,7 @@ export default {
       },
       addFilter (state, filter){
         state[filter].active = true
+        state.filtersCount += 1
       },
       setFilter (state, {filter, value, name}){
         state[filter] = {
@@ -52,6 +54,12 @@ export default {
           value: '',
           name: ''
         }
+        if(state.filtersCount > 0){
+          state.filtersCount -= 1
+        }
+      },
+      resetSearсh (state){
+        state.search = ''
       }
     },
     actions: {
@@ -76,6 +84,14 @@ export default {
       },
       resetFilter ({commit}, payload){
         commit('resetFilter', payload)
+      },
+      resetAllFilters ({commit}){
+        commit('resetFilter', 'project')
+        commit('resetFilter', 'executor')
+        commit('resetFilter', 'priority')
+      },
+      resetSearch({commit}){
+        commit('resetSearсh')
       }
     },
     getters: {
@@ -84,6 +100,9 @@ export default {
       },
       getSearch (state){
         return state.search
+      },
+      getFiltersCount (state){
+        return state.filtersCount
       }
     }
 }

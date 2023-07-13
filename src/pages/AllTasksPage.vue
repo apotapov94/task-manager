@@ -1,14 +1,14 @@
 <template>
-  <Title title="Задачи" />
-  <div class="page-wrapper">
-    <div class="top-panel">
-      <ViewSwitcher />
-      <StatusFilter />
-      <Search />
-      <Filter />
+    <Title title="Задачи" />
+    <div class="page-wrapper">
+      <div class="top-panel">
+        <ViewSwitcher />
+        <StatusFilter />
+        <Search />
+        <Filter />
+      </div>
+      <TasksList :tasks="this.$store.getters.getAllTasks" />
     </div>
-    <TasksList :tasks="this.$store.getters.getAllTasks" />
-  </div>
 </template>
 
 <script>
@@ -37,6 +37,9 @@ export default {
   },
   mounted (){
     this.$store.dispatch('hidePanel')
+    this.$store.dispatch('closeMenu')
+    this.$store.dispatch('resetAllFilters')
+    this.$store.dispatch('resetSearch')
   },
 }
 </script>

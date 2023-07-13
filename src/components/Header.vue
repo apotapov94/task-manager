@@ -37,6 +37,9 @@
               <router-link to="/my-tasks">Мои задачи <span class="count">{{ this.$store.getters.getMyTasksCount }}</span></router-link>
             </li>
             <li v-if="user">
+              <router-link to="/canban">Доска задач</router-link>
+            </li>
+            <li v-if="user">
               <router-link to="/projects">Проекты</router-link>
             </li>
             <li v-if="!user">

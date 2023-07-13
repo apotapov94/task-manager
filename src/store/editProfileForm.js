@@ -15,19 +15,11 @@ export default {
             state.formData[field] = value
         },
         initialProfile (state, profile){
-            console.log(profile)
             state.formData.name = profile.name ? profile.name : ''
             state.formData.surname = profile.surname ? profile.surname : ''
             state.formData.bio = profile.bio ? profile.bio : ''
             state.formData.phone = profile.phone ? profile.phone : ''
             state.formData.position = profile.position ? profile.position : ''
-            // if(profile){
-            //     state.formData.name = profile.name ? name : ''
-            //     state.formData.surname = profile.surname ? surname : ''
-            //     state.formData.bio = profile.bio ? bio : ''
-            //     state.formData.phone = profile.phone ? phone : ''
-            //     state.formData.position = profile.position ? position : ''
-            // }
         }
     },
     actions: {
