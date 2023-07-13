@@ -1,0 +1,59 @@
+.canban {
+    display: flex;
+    grid-gap: 16px;
+    &__column {
+        background: #4646468c;
+        padding: 16px 8px;
+        min-width: 295px;
+        min-height: 200px;
+        max-width: 295px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 1px 1px 6px #272727;
+        &.column-todo {
+            .tasks-count {
+                background: rgba(77, 84, 84, 0.73); 
+            }
+        }
+        &.column-in-progress {
+            .tasks-count {
+                background: rgba(90, 134, 255, 0.4509803922); 
+            }
+        }
+        &.column-checking {
+            .tasks-count {
+                background: rgba(254, 211, 48, 0.4901960784); 
+            }
+        }
+        &.column-done {
+            .tasks-count {
+                background: rgba(112, 182, 51, 0.5607843137); 
+            }
+        }
+    }
+    &__column-title {
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        grid-gap: 4px;
+        .tasks-count {
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    }
+    &__tasks-list {
+        display: grid;
+        grid-gap: 8px;
+    }
+    &__add-btn {
+        background: #71ff411f;
+        margin-top: 16px;
+        text-align: center;
+        max-width: 100%;
+    }
+    .task-card {
+        background: rgb(77 84 84 / 73%);
+        box-shadow: 1px 1px 3px #272727;
+    }
+}

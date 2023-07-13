@@ -63,7 +63,6 @@ export default {
         },
         getAuthUser (state, getters){
             if(getters.getUser){
-                console.log(getters.getUser.uid, state.users)
                 //console.log(state.users.find(user => user.id === getters.getUser.uid))
                 const authUser = state.users.find(user => user.id === getters.getUser.uid)
                 if(authUser){

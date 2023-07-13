@@ -15,7 +15,13 @@ export default {
       priority: '',
       date: ''
     },
-    calendarEditValue: ''
+    calendarEditValue: '',
+    statusList: {
+      todo: 'Ожидает выполнения',
+      'in-progress': 'В работе',
+      checking: 'На проверке',
+      done: 'Готово'
+    }
   },
   mutations: {
     addTask(state, newTask) {
@@ -49,10 +55,10 @@ export default {
       let newState = state.tasks.map(function(task){
         if(task.id == id){
           task.status = status
-          return task
         }
+        return task
       })
-      state.tasks = state.tasks
+      state.tasks = newState
     },
     initialEdit (state, task){
       state.editedFields = {
@@ -84,7 +90,7 @@ export default {
           for(let i = 0; i <= 500; i++){
             const newTask = {
               created: new Date(Date.now()).toLocaleString(),
-              status: 'active',
+              status: 'todo',
               author: 'QwI57L36qXVuA8EIlMqn6eZK01p1',
               date: '13.07.2023',
               descr: 'тестовое описание',
@@ -108,7 +114,7 @@ export default {
       const newTaskInfo = {
         created: new Date(Date.now()).toLocaleString(),
         author: authorId,
-        status: 'active'
+        status: 'todo'
       }
       const newTask = Object.assign(newTaskInfo, this.state.newTask.formData)
       try {
@@ -175,7 +181,7 @@ export default {
     async refreshTasks({ commit, dispatch }) {
       dispatch('setLoading', true)
       try {
-        const q = query(collection(db, "tasks"), orderBy('date', 'asc'), limit(20));
+        const q = query(collection(db, "tasks"), orderBy('date', 'asc'));
         const tasks = await getDocs(q);
         let formatData = []
         tasks.forEach((task) => {
@@ -205,9 +211,9 @@ export default {
         const taskRef = doc(db, 'tasks', id);
         await setDoc(taskRef, fields, { merge: true });
         console.log('success')
-        dispatch('setLoading', false)
         dispatch('setMode', null)
         dispatch('refreshTasks')
+        dispatch('setLoading', false)
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -219,13 +225,13 @@ export default {
     async setStatus ({ commit,dispatch }, {id, status}){
       dispatch('setLoading', true)
       try {
+        commit('setStatus', {id, status})
         console.log(id, status)
         const taskRef = doc(db, 'tasks', id);
         await setDoc(taskRef, { status: status }, { merge: true });
         console.log('success')
         dispatch('setLoading', false)
         //dispatch('refreshTasks')
-        commit('setStatus', {id, status})
       } catch (e) {
           dispatch('setLoading', false)
           console.error("Error adding document: ", e);
@@ -233,7 +239,8 @@ export default {
     },
     writeField ({commit}, payload){
       commit('writeEditedField', payload)
-    }
+    },
+
   },
   getters: {
     getAllTasks (state, getters){
@@ -315,6 +322,86 @@ export default {
     },
     getCalendarValue (state){
       return state.calendarEditValue
+    },
+    getTasksTodo (state, getters){
+      let tasksResult
+      tasksResult = state.tasks.filter(task => task.status === 'todo')
+      
+      if(getters.getFilter.project.value){
+        tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
+      }
+      if(getters.getFilter.executor.value){
+        tasksResult = tasksResult.filter(task => task.executor === getters.getFilter.executor.value)
+      }
+      if(getters.getFilter.priority.value){
+        tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+      }
+      if(getters.getFilter.search){
+        tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+      }
+      
+      return tasksResult
+    },
+    getTasksInProgress (state, getters){
+      let tasksResult
+      tasksResult = state.tasks.filter(task => task.status === 'in-progress')
+      
+      if(getters.getFilter.project.value){
+        tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
+      }
+      if(getters.getFilter.executor.value){
+        tasksResult = tasksResult.filter(task => task.executor === getters.getFilter.executor.value)
+      }
+      if(getters.getFilter.priority.value){
+        tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+      }
+      if(getters.getFilter.search){
+        tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+      }
+      
+      return tasksResult
+    },
+    getTasksChecking (state, getters){
+      let tasksResult
+      tasksResult = state.tasks.filter(task => task.status === 'checking')
+      
+      if(getters.getFilter.project.value){
+        tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
+      }
+      if(getters.getFilter.executor.value){
+        tasksResult = tasksResult.filter(task => task.executor === getters.getFilter.executor.value)
+      }
+      if(getters.getFilter.priority.value){
+        tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+      }
+      if(getters.getFilter.search){
+        tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+      }
+      
+      return tasksResult
+      
+    },
+    getTasksDone (state, getters){
+      let tasksResult
+      tasksResult = state.tasks.filter(task => task.status === 'done')
+      
+      if(getters.getFilter.project.value){
+        tasksResult = tasksResult.filter(task => task.project === getters.getFilter.project.value)
+      }
+      if(getters.getFilter.executor.value){
+        tasksResult = tasksResult.filter(task => task.executor === getters.getFilter.executor.value)
+      }
+      if(getters.getFilter.priority.value){
+        tasksResult = tasksResult.filter(task => task.priority === getters.getFilter.priority.value)
+      }
+      if(getters.getFilter.search){
+        tasksResult = tasksResult.filter(task => task.title.toLowerCase().indexOf(getters.getFilter.search) !== -1)
+      }
+      
+      return tasksResult
+    },
+    getStatusList (state){
+      return state.statusList
     }
   }
 }

@@ -57,6 +57,10 @@
             }
             return statusText
         },
-    }
+    },
+    mounted (){
+            this.$store.dispatch('hidePanel')
+            this.$store.dispatch('closeMenu')
+        },
   }
 </script>

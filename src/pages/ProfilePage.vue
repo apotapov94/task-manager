@@ -39,7 +39,11 @@
                 this.$store.dispatch('uploadFile', {id: this.authUser.id,file})
                 this.$store.dispatch('setAvatar', this.authUser.id)
             },
-        }
+        },
+        mounted (){
+            this.$store.dispatch('hidePanel')
+            this.$store.dispatch('closeMenu')
+        },
     }
 </script>
 

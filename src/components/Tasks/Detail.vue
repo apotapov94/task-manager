@@ -1,28 +1,17 @@
 <template>
+    <div class="edit-title" v-if="mode === 'edit'">Режим редактирования:</div>
     <div class="task-detail" v-if="task">
         <div class="task-detail__header">
-            <div v-if="mode === 'edit'">Режим редактирования:</div>
-            <div class="task-detail__buttons" v-if="authUser.id === task.executor && mode !== 'edit'">
-                <AppButton @click="setStatus('done')" v-if="task.status === 'active' && authUser.id == task.author">Готово</AppButton>
-                <AppButton @click="setStatus('checking')" v-if="task.status === 'active' && authUser.id !== task.author">Готово</AppButton>
-                <AppButton class="btn-default" v-if="task.status === 'checking'">На проверке</AppButton>
-                <AppButton class="btn-default" v-if="task.status === 'done'">Выполнено</AppButton>
-                <div class="small-icons" v-if="authUser.id == task.author">
-                    <div class="small-icon edit">
-                        <EditIcon @hover="openContextBlock('edit')" @click="setMode('edit')" />
-                        <div class="tooltip">Редактировать</div>
-                    </div>
-                    <div class="small-icon remove" @click="deleteTask(curTaskId)">
-                        <img src="@/assets/img/remove.png" alt="">
-                        <div class="tooltip">Удалить</div>
+            <div class="task-detail__buttons" v-if="authUser.id === task.author">
+                <div :class="`task-detail__status-change context-block-link btn ${task.status}`" @click="openContextBlock('status')">
+                    {{ getStatusValue(task.status) }}
+                    <div class="context-block" v-if="contextBlocks.status">
+                        <div class="filter__item" v-for="(value, name) in statuses" :class="{selected: task.status === name}, name" @click="setStatus(name)">
+                            {{ value }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="task-detail__buttons" v-else-if="authUser.id === task.author && mode !== 'edit'">
-                <AppButton @click="setStatus('active')" v-if="task.status === 'checking'">Вернуть в работу</AppButton>
-                <AppButton @click="setStatus('done')" v-if="task.status === 'checking'">Готово</AppButton>
-                <AppButton class="btn-default" v-if="task.status === 'done'">Выполнено</AppButton>
-                <div class="small-icons">
+                <div class="small-icons" v-if="mode !== 'edit'">
                     <div class="small-icon edit">
                         <EditIcon @hover="openContextBlock('edit')" @click="setMode('edit')" />
                         <div class="tooltip">Редактировать</div>
@@ -38,9 +27,9 @@
             </div>
         </div>
         <div class="task-detail__body">
-            <div class="task-detail__info status">
-                Статус: <span :class="task.status">{{ getStatus(task.status) }}</span>
-            </div>
+            <!-- <div class="task-detail__info status">
+                Статус: <span :class="task.status">{{ getStatusValue(task.status) }}</span>
+            </div> -->
             <div class="task-detail__info user">
                 Исполнитель: 
                 <span v-if="mode === 'edit'" class="context-block-link" @click="openContextBlock('users')">{{ getUser(editedFields.executor).name }}</span>
@@ -166,8 +155,14 @@
             projects (){
                 return this.$store.getters.getProjects
             },
+            statuses (){
+                return this.$store.getters.getStatusList
+            }
         },
         methods: {
+            getStatusValue (status){
+                return this.$store.getters.getStatusList[status]
+            },
             calendarValueSave (){
                 const value = this.$store.getters.getCalendarValue
                 this.$store.dispatch('writeField', {field: 'date', value})
@@ -204,6 +199,12 @@
                 return this.$store.getters.getUserById(id)
             },
             getPriority (priority){
+                const values = {
+                    todo: 'Ожидает выполнения',
+                    'in-progress': 'В работе',
+                    checking: 'На проверке',
+                    done: 'Готово'
+                }
                 let priorityText
                 switch(priority){
                     case 'standart':
@@ -217,21 +218,6 @@
                         break 
                 }
                 return priorityText
-            },
-            getStatus (status){
-                let statusText
-                switch(status){
-                    case 'active':
-                        statusText = 'В работе'
-                        break
-                    case 'checking':
-                        statusText = 'На проверке'
-                        break    
-                    case 'done':
-                        statusText = 'Выполнена'
-                        break 
-                }
-                return statusText
             },
             deleteTask (id){
                 this.$store.dispatch('deleteTask', id)
@@ -256,7 +242,6 @@
             },
         },
         beforeMount() {
-            console.log(1)
             this.$store.dispatch('refreshComments');
         }
     }

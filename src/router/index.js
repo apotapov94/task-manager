@@ -7,6 +7,7 @@ import RegisterPage from '@/pages/RegisterPage.vue'
 import ProjectsPage from '@/pages/ProjectsPage.vue'
 import ProjectDetailPage from '@/pages/ProjectDetailPage.vue'
 import ProfilePage from '@/pages/ProfilePage.vue'
+import CanbanPage from '@/pages/CanbanPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,7 +47,10 @@ const router = createRouter({
     {
       path: '/projects/:keyword',
       name: 'projectPage',
-      component: ProjectDetailPage
+      component: ProjectDetailPage,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register',
@@ -57,22 +61,18 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/canban',
+      name: 'canban',
+      component: CanbanPage,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  // if(to.path === '/login' && auth.currentUser){
-  //   next('/')
-  //   return;
-  // }
 
-  // if(to.matched.some(record => record.meta.requiresAuth) && !auth.currentUser){
-  //   next('/login')
-  //   return;
-  // }
-
-  next();
-})
 
 export default router

@@ -1,10 +1,10 @@
 <template>
-  <section>
-    <AppButton class="add-task-btn" v-if="abilityToAdd" @click="showAddTaskForm">Добавить задачу</AppButton>
+  <section class="section-wrapper">
+    <AppButton class="add-task-btn" v-if="user" @click="showAddTaskForm">Добавить задачу</AppButton>
     <div v-if="!loading" :class="`tasks-list ${viewMode}`">
       <TaskCard v-for="task in tasks" :task="task" />
     </div>
-    <AppButton class="add-task-btn" @click="fetchTasks">Показать еще</AppButton>
+    <!-- <AppButton class="add-task-btn" @click="fetchTasks">Показать еще</AppButton> -->
     <Throbber :view="view" v-if="loading" />
   </section>
 </template>
@@ -29,6 +29,9 @@ export default {
     },
     loading (){
       return this.$store.getters.getLoading
+    },
+    user (){
+      return this.$store.getters.getUser
     }
   },
   props: {

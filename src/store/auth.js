@@ -89,18 +89,25 @@ export default {
             auth.onAuthStateChanged(async user => {
                 console.log('авторизованный пользователь загружается')
                 if(user === null){
+                    if(router.isReady() && 
+                        (router.currentRoute.value.path === '/canban' 
+                        || router.currentRoute.value.path === '/projects' 
+                        || router.currentRoute.value.path === '/my-tasks')){
+                        router.push('/login')
+                    }
                     commit('clearUser')
                 } else {
                     commit('setUser', user)
-                    if(router.isReady() && router.currentRoute.value.path === '/login'){
-                        router.push('/')
+                    if(router.isReady() && router.currentRoute.value.path === '/login' ){
+                        router.push('canban')
                     }
                     
-                    console.log('авторизованный пользователь загружен', user.uid)
+                    console.log('авторизованный пользователь загружен')
                     if(this.getters.getAuthUser){
                         dispatch('initialProfile', this.getters.getAuthUser)
                         console.log('поменялся профиль')
                     }
+                    dispatch('setLoading', false)
                 }
             })
         },

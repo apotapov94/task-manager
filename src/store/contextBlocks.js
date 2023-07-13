@@ -5,7 +5,8 @@ export default {
             projects: false,
             users: false,
             priority: false,
-            datePicker: false
+            datePicker: false,
+            status: false
         }
     },
     mutations: {
