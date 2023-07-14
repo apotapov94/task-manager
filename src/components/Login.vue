@@ -1,8 +1,9 @@
 <template>
     <section class="login-section">
+        <Message v-if="message.show" :type="message.type" :text="message.text" />
         <form @submit.prevent="login">
             <AppInput placeholder="Email" v-model="loginForm.email"></AppInput>
-            <AppInput placeholder="Пароль" v-model="loginForm.password"></AppInput>
+            <AppInput type="password" placeholder="Пароль" v-model="loginForm.password"></AppInput>
             <AppButton>Вход</AppButton>
         </form>
         <!-- <button @click="signWithGoogle">Sign with google</button> -->
@@ -16,9 +17,16 @@
                 loginForm: {}
             }
         },
+        computed: {
+            message (){
+                return this.$store.getters.getMessage
+            },
+        },
         methods: {
             login (){
-                this.$store.dispatch('login', this.loginForm)
+                if(this.message.type !== 'error'){
+                    this.$store.dispatch('login', this.loginForm)
+                }    
             },
             signWithGoogle (){
 
