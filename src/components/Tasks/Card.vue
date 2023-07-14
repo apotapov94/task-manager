@@ -35,6 +35,11 @@ export default {
       ruquired: true
     }
   },
+  computed: {
+    user (){
+      return this.$store.getters.getUser
+    },
+  },
   methods: {
     deleteTask(id) {
       console.log(id)
@@ -50,11 +55,13 @@ export default {
       return formatedDate
     },
     showTaskDetail() {
-      if(!event.target.classList.contains('user-link') && !event.target.classList.contains('task-card__executor-avatar')){
-        this.$store.dispatch('showPanel');
-        this.$store.dispatch('setTaskToShow', this.task.id)
-        this.$store.dispatch('showView', 'task-detail');
-        this.$store.dispatch('setHeading', this.task.title);
+      if(this.user){
+        if(!event.target.classList.contains('user-link') && !event.target.classList.contains('task-card__executor-avatar') && !event.target.classList.contains('link')){
+          this.$store.dispatch('showPanel');
+          this.$store.dispatch('setTaskToShow', this.task.id)
+          this.$store.dispatch('showView', 'task-detail');
+          this.$store.dispatch('setHeading', this.task.title);
+        }
       }
     },
     showUserInfo() {
