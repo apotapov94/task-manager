@@ -13,9 +13,9 @@
     components: {
       Title, Login
     },
-    computed: {
-
-    }
+    mounted (){
+      this.$store.dispatch('hideMessage')
+    },
   }
   </script>
   

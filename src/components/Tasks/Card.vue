@@ -3,12 +3,12 @@
     <div class="task-card__header">
       <div class="task-card__title">{{ task.title }}</div>
       <div class="task-card__executor">
-        Исполнитель: <span class="user-link" @click="showUserInfo">{{ getUser(task.executor).name }}</span>
+        <span class="key">Исполнитель:</span> <span class="user-link" @click="showUserInfo">{{ getUser(task.executor).name }}</span>
         <img class="task-card__executor-avatar" @click="showUserInfo" v-if="getUser(task.executor).avatar" :src="getUser(task.executor).avatar" alt="">
         <img class="task-card__executor-avatar" @click="showUserInfo" src="@/assets/img/user-profile.png" v-else alt="">
       </div>
       <div class="task-card__project" v-if="getProject(task.project)">
-        Проект: <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
+        <span class="key">Проект:</span> <span><router-link class="link" :to="`/projects/${getProject(task.project).keyword}`">{{ getProject(task.project).title }}</router-link></span>
       </div>
     </div>
     
@@ -50,7 +50,7 @@ export default {
       return formatedDate
     },
     showTaskDetail() {
-      if(!event.target.classList.contains('user-link')){
+      if(!event.target.classList.contains('user-link') && !event.target.classList.contains('task-card__executor-avatar')){
         this.$store.dispatch('showPanel');
         this.$store.dispatch('setTaskToShow', this.task.id)
         this.$store.dispatch('showView', 'task-detail');
@@ -58,6 +58,7 @@ export default {
       }
     },
     showUserInfo() {
+      console.log('click')
       this.$store.dispatch('showPanel');
       this.$store.dispatch('setUserToShow', this.task.executor)
       this.$store.dispatch('showView', 'user-info');

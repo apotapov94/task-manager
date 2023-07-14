@@ -19,20 +19,20 @@ export default {
         }
     },
     actions: {
-        async login ({commit}, payload){
+        async login ({commit, dispatch}, payload){
             const { email, password } = payload
             try {
                 await signInWithEmailAndPassword(auth, email, password)
             } catch (error){
                 switch (error.code){
                     case 'auth/user-not-found':
-                        alert('user not found')
+                        dispatch('setMessage', { text: 'Пользователь с таким email не зарегистрирован', type: 'error' })
                         break
                     case 'auth/wrong-password':
-                        alert('wrong password')      
+                        dispatch('setMessage', { text: 'Неправильный пароль', type: 'error' })      
                         break
                     default:
-                        alert('something went wrong')          
+                        dispatch('setMessage', { text: 'Неизвестная ошибка', type: 'error' })            
                 }
 
                 return
@@ -49,19 +49,19 @@ export default {
             } catch (error){
                 switch (error.code){
                     case 'auth/email-already-in-use':
-                        alert('email already in use')
+                        dispatch('setMessage', { text: 'Пользователь с таким email уже существует!', type: 'error' })
                         break
                     case 'auth/invalid-email':
-                        alert('invalid email')      
+                        dispatch('setMessage', { text: 'Некорректный email!', type: 'error' })  
                         break
                     case 'auth/operation-not-allowed':
-                        alert('operation not allowed')      
+                        console.log('operation not allowed')      
                         break
-                    case 'auth/weak-password':
-                        alert('weak password')      
+                    case 'auth/weak-password':   
+                        dispatch('setMessage', { text: 'Слишком короткий пароль', type: 'error' })    
                         break    
                     default:
-                        alert('something went wrong')          
+                        dispatch('setMessage', { text: 'Неизвестная ошибка', type: 'error' })           
                 }
 
                 return

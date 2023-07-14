@@ -39,6 +39,7 @@ mounted (){
     this.$store.dispatch('closeMenu')
     this.$store.dispatch('resetAllFilters')
     this.$store.dispatch('resetSearch')
+    this.$store.dispatch('hideMessage')
   }
 }
 </script>

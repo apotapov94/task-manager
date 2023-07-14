@@ -19,6 +19,7 @@ computed: {
 mounted (){
             this.$store.dispatch('hidePanel')
             this.$store.dispatch('closeMenu')
+            this.$store.dispatch('hideMessage')
         },
 }
 </script>
