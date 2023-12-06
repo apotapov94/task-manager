@@ -1,0 +1,15 @@
+{
+  "curDomain": "other-domain.ru",
+  "mainColor": "#fff",
+  "saleCard": {
+    "color": "rgb(237 237 237)",
+    "fontSize": "18px",
+    "textColor": "#2495fe",
+    "padding": "8px"
+  },
+  "btn": {
+    "target": "callback_modal",
+    "class": "btn btn--yellow btn--big banner__btn",
+    "text": "Свяжитесь с нами"
+  }
+}
