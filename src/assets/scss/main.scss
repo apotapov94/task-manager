@@ -43,12 +43,11 @@ h6 {
   margin: 0;
 }
 
-svg path,
-svg rect {
-  stroke: inherit;
-  stroke-width: inherit;
-  fill: inherit;
-}
+svg path, svg rect {
+  stroke:inherit;
+  stroke-width:inherit;
+  fill:inherit;
+  }
 
 input,
 textarea,
@@ -86,12 +85,14 @@ section,
 .wrapper {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   margin: 0 auto;
 }
 
 .wrapper-content {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   &.wrapper-content--fixed {
     margin-top: 80px;
   }
@@ -116,6 +117,11 @@ section,
 
 @import './common.scss';
 
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 300px auto;
+}
+
 .header {
   background: $primary-color;
   color: $default-color;
@@ -135,10 +141,10 @@ section,
       grid-gap: $m1;
     }
     span.count {
-      background: #70b633;
-      padding: 2px 4px;
-      border-radius: 4px;
-      margin-left: 4px;
+        background: #70b633;
+        padding: 2px 4px;
+        border-radius: 4px;
+        margin-left: 4px;
     }
   }
   &__profile.onload {
@@ -173,26 +179,27 @@ section,
       grid-gap: $m1;
     }
     li {
-      background: #646464;
+      background:#646464;
       height: 19px;
       border-radius: 4px;
       animation: flicker 1s ease-out infinite;
-      &:nth-child(1) {
+      &:nth-child(1){
         width: 100px;
       }
-      &:nth-child(2) {
+      &:nth-child(2){
         width: 150px;
       }
-      &:nth-child(3) {
+      &:nth-child(3){
         width: 120px;
       }
-      &:nth-child(4) {
+      &:nth-child(4){
         width: 180px;
       }
-      &:nth-child(5) {
+      &:nth-child(5){
         width: 140px;
       }
     }
+    
   }
   &__logo {
     color: $success-color;
@@ -222,16 +229,15 @@ section,
   &__profile-email {
     margin-top: 4px;
     color: #969696;
-  }
+  } 
 }
-.sales-list {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 16px;
-}
+
 main {
   padding: 0;
   //background: $light-color;
+  background: linear-gradient(237deg, black, #267a7c);
+  height: 100vh;
+  overflow-y: scroll;
   //background: url('@/assets/img/bg.jpg');
   background-size: cover;
 }
@@ -240,10 +246,7 @@ main {
   //background: #250a0acc;
   height: 100%;
   color: #fff;
-  p,
-  span,
-  h1,
-  h2 {
+  p, span, h1, h2 {
     color: #fff;
   }
   p {
@@ -254,8 +257,8 @@ main {
   padding-bottom: 32px;
 }
 .header__profile {
-  display: flex;
-  grid-gap: 8px;
+    display: flex;
+    grid-gap: 8px;
 }
 .title-section {
   padding: $m4 $m4;
@@ -368,7 +371,7 @@ main {
       width: 24px;
       cursor: pointer;
       height: 24px;
-      transition: all 0.3s;
+      transition: all .3s;
     }
     &:hover {
       svg {
@@ -382,6 +385,8 @@ main {
     }
   }
 }
+
+
 
 .search {
   input {
@@ -422,7 +427,7 @@ main {
   display: flex;
   grid-gap: 16px;
   align-items: center;
-
+  
   &__item {
     cursor: pointer;
     padding: 4px 16px;
@@ -465,6 +470,7 @@ main {
         background: rgba(112, 182, 51, 0.79);
       }
     }
+    
   }
   .reset-filter {
     svg {
@@ -472,7 +478,7 @@ main {
     }
   }
   .active-value {
-    color: $success-color;
+    color: $success-color
   }
   &__active-filter {
     display: flex;
@@ -517,7 +523,7 @@ main {
   grid-gap: 8px;
   span {
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all .3s;
     &:hover {
       color: $success-color;
     }
@@ -712,7 +718,7 @@ main {
     align-items: center;
     grid-gap: 4px;
     position: relative;
-
+    
     span {
       color: #fff;
     }
@@ -749,6 +755,7 @@ main {
       &:focus {
         background: #0000002b;
       }
+      
     }
     &:hover {
       textarea {
@@ -816,7 +823,7 @@ main {
     }
   }
   &:hover {
-    & > .tooltip {
+    &>.tooltip {
       display: block;
     }
   }
@@ -1039,7 +1046,7 @@ form {
         }
         svg {
           display: block;
-        }
+        }  
       }
       &:before {
         content: '';
@@ -1082,7 +1089,7 @@ form {
 }
 .loader::after,
 .loader::before {
-  content: '';
+  content: '';  
   box-sizing: border-box;
   position: absolute;
   left: 0;
@@ -1105,7 +1112,7 @@ form {
   border-color: $success-color $success-color transparent transparent;
   animation: rotation 1.5s linear infinite;
 }
-
+    
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -1113,7 +1120,7 @@ form {
   100% {
     transform: rotate(360deg);
   }
-}
+} 
 @keyframes rotationBack {
   0% {
     transform: rotate(0deg);
@@ -1123,18 +1130,19 @@ form {
   }
 }
 
-@media (max-width: 1600px) {
+
+@media(max-width: 1600px){
   .tasks-list {
     &.grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
     }
   }
 }
-@media (max-width: 1300px) {
+@media(max-width: 1300px){
   .tasks-list {
     &.grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+      grid-template-columns: repeat(3,1fr);
+    }  
     &.list {
       .task-card {
         grid-template-columns: 1fr;
@@ -1143,16 +1151,16 @@ form {
     }
   }
 }
-@media (max-width: 1150px) {
+@media(max-width: 1150px){
   .top-panel {
     display: grid;
   }
 }
-@media (max-width: 1100px) {
+@media(max-width: 1100px){
   .tasks-list {
     &.grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+      grid-template-columns: repeat(2,1fr);
+    }  
   }
   .added-filters {
     flex-wrap: wrap;
@@ -1161,7 +1169,7 @@ form {
     display: none;
   }
 }
-@media (max-width: 992px) {
+@media(max-width: 992px){
   .content-wrapper {
     display: block;
   }
@@ -1188,17 +1196,17 @@ form {
         right: 0;
         height: 2px;
         background: #fff;
-        &:nth-child(1) {
+        &:nth-child(1){
           top: 0;
         }
-        &:nth-child(2) {
+        &:nth-child(2){
           top: 50%;
           transform: translateY(-50%);
         }
-        &:nth-child(3) {
+        &:nth-child(3){
           bottom: 0;
         }
-        transition: all 0.3s;
+        transition: all .3s;
       }
       &:hover {
         span {
@@ -1215,7 +1223,7 @@ form {
       height: 100vh;
       left: 0;
       transform: translateX(-500px);
-      transition: all 0.4s;
+      transition: all .4s;
       &.active {
         transform: translateX(0px);
       }
@@ -1225,14 +1233,14 @@ form {
     }
   }
 }
-@media (max-width: 768px) {
+@media(max-width: 768px){
   .tasks-list {
     &.grid {
-      grid-template-columns: repeat(1, 1fr);
+      grid-template-columns: repeat(1,1fr);
       .task-card {
         width: 100%;
       }
-    }
+    }  
     &.list {
       .task-card {
         justify-content: space-between;
@@ -1242,6 +1250,7 @@ form {
         }
         &__executor {
           width: auto;
+          
         }
         &__title {
           width: auto;
@@ -1283,7 +1292,7 @@ form {
     }
   }
 }
-@media (max-width: 400px) {
+@media(max-width: 400px){
   .status-filter {
     flex-wrap: wrap;
   }
@@ -1301,7 +1310,7 @@ form {
     }
   }
 }
-@media (max-width: 360px) {
+@media(max-width: 360px){
   .tasks-list {
     &.list {
       .task-card {
@@ -1322,4 +1331,4 @@ form {
     flex-direction: column;
     align-items: flex-start;
   }
-}
+}  

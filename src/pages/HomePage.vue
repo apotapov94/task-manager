@@ -1,17 +1,18 @@
 <template>
-  <div class="page-wrapper">
-    <SalesList />
+  <Title title="Главная" />
+  <div class="page-wrapper"> 
   </div>
 </template>
 
 <script>
 import Title from '@/components/UI/Title.vue'
-import SalesList from '@/components/Sales/List.vue'
+import Register from '@/components/Register.vue'
 
 export default {
   components: {
-    Title,
-    SalesList
+    Title, Register
+  },
+  computed: {
   }
 }
 </script>
