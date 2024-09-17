@@ -4,7 +4,7 @@ npm run dev
 
 Можно войти по данным
 
-логин: guest-test@mail.ru
+логин: a.potapov94@mail.ru
 
 пароль: 123456
 
